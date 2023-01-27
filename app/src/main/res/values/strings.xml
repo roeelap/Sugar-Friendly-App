@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">Milab-App</string>
-    <string name="editText_searchBar_homePage">חיפוש</string>
     <string name="profile_picture_description">profile picture</string>
     <string name="textView_welcome_msg">Good evening Roee!</string>
     <string name="textView_what_are_we_eating_today">So what are we eating today?</string>
@@ -8,4 +7,12 @@
     <string name="dish_image_description">dish_image</string>
     <string name="TextView_dish_item_dish_name">Dish name</string>
     <string name="TextView_dish_item_restaurant">Restaurant</string>
+    <string name="TextView_recommendations_label">Recommendations</string>
+    <string name="TextView_top_rated_label">Top rated</string>
+    <string name="navbar_home_button_text">Home</string>
+    <string name="navbar_map_button_text">Map</string>
+    <string name="navbar_plus_button_text">Plus</string>
+    <string name="navbar_camera_button_text">Camera</string>
+    <string name="navbar_profile_button_text">Profile</string>
+    <string name="TextView_newest_label">Newest</string>
 </resources>

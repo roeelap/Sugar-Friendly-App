@@ -6,6 +6,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.LinearLayout;
+
+import org.w3c.dom.Element;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,8 +43,23 @@ public class HomePageActivity extends AppCompatActivity {
 
     private void initDishRecyclerViews() {
         Log.d(TAG, "initDishRecyclerViews");
+
+        // init recommendations recycler view
+        final RecyclerView recommendations = findViewById(R.id.recommendations);
+        initRecyclerView(recommendations);
+
+        // init top rated recycler view
+        final RecyclerView topRated = findViewById(R.id.topRated);
+        initRecyclerView(topRated);
+
+        // init newest recycler view
+        final RecyclerView newest = findViewById(R.id.newest);
+        initRecyclerView(newest);
+    }
+
+    private void initRecyclerView(RecyclerView recyclerView) {
+        Log.d(TAG, "initDishRecyclerView - " + recyclerView.getId() + "");
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
-        RecyclerView recyclerView = findViewById(R.id.recommendations);
         recyclerView.setLayoutManager(linearLayoutManager);
         DishRecyclerViewAdapter adapter = new DishRecyclerViewAdapter(this, dishes);
         recyclerView.setAdapter(adapter);

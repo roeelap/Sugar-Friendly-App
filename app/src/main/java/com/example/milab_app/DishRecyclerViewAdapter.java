@@ -37,6 +37,7 @@ public class DishRecyclerViewAdapter extends RecyclerView.Adapter<DishRecyclerVi
         Dish dish = dishes.get(position);
         holder.dishName.setText(dish.getName());
         holder.restaurant.setText(dish.getRestaurant().getName());
+        holder.dishImage.setImageResource(R.drawable.sushi);
 
         holder.dishImage.setOnClickListener(new View.OnClickListener() {
             @Override
