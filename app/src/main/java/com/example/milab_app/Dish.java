@@ -18,6 +18,15 @@ public class Dish {
         this.rating = rating;
     }
 
+    public Dish(String name, Restaurant restaurant) {
+        this.name = name;
+        this.restaurant = restaurant;
+        this.foodTags = new String[0];
+        this.nutritionTags = new String[0];
+        this.likes = 0;
+        this.rating = 0;
+    }
+
     /* getters */
     public String getName() { return name; }
     public Restaurant getRestaurant() { return restaurant; }
