@@ -1,7 +1,7 @@
 <resources>
-    <string name="app_name">Milab-App</string>
+    <string name="app_name">Sugar Friendly</string>
     <string name="profile_picture_description">profile picture</string>
-    <string name="textView_welcome_msg">Good evening Roee!</string>
+    <string name="greeting_text">Good evening Roee!</string>
     <string name="textView_what_are_we_eating_today">So what are we eating today?</string>
     <string name="EditText_search_bar_hint">Search</string>
     <string name="dish_image_description">dish_image</string>
@@ -15,4 +15,12 @@
     <string name="navbar_camera_button_text">Camera</string>
     <string name="navbar_profile_button_text">Profile</string>
     <string name="TextView_newest_label">Newest</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="title_home">Home</string>
+    <string name="title_map">Map</string>
+    <string name="title_add">Add</string>
+    <string name="title_camera">Camera</string>
+    <string name="title_profile">Profile</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

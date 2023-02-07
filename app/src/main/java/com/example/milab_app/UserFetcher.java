@@ -15,20 +15,22 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class UserFetcher {
-    private RequestQueue _queue;
+    private final RequestQueue _queue;
     private final static String REQUEST_URL = "http://10.0.0.2:8080/users/login";
 
-    public class UserResponse {
+    public static class UserResponse {
         public boolean isError;
+        public String name;
         public String username;
         public JSONArray favDishes;
         public JSONArray favRestaurants;
         public JSONArray recentFoodTags;
         public JSONArray recentNutritionTags;
 
-        public UserResponse(boolean isError, String username, JSONArray favDishes, JSONArray favRestaurants,
+        public UserResponse(boolean isError, String name, String username, JSONArray favDishes, JSONArray favRestaurants,
                             JSONArray recentFoodTags, JSONArray recentNutritionTags) {
             this.isError = isError;
+            this.name = name;
             this.username = username;
             this.favDishes = favDishes;
             this.favRestaurants = favRestaurants;
@@ -46,7 +48,7 @@ public class UserFetcher {
     }
 
     private UserResponse createErrorResponse() {
-        return new UserResponse(true, null, null,
+        return new UserResponse(true, null, null, null,
                 null, null, null);
     }
 
@@ -66,12 +68,13 @@ public class UserFetcher {
                     public void onResponse(JSONObject response) {
                         Log.d("StockGetter", "Got response: " + response.toString());
                         try {
+                            String name = response.getString("name");
                             String username = response.getString("username");
                             JSONArray favDishes = response.getJSONArray("favDishes");
                             JSONArray favRestaurants = response.getJSONArray("favRestaurants");
                             JSONArray recentFoodTags = response.getJSONArray("recentFoodTags");
                             JSONArray recentNutritionTags = response.getJSONArray("recentNutritionTags");
-                            UserResponse res = new UserResponse(false, username, favDishes, favRestaurants,
+                            UserResponse res = new UserResponse(false, name, username, favDishes, favRestaurants,
                                     recentFoodTags, recentNutritionTags);
                             listener.onResponse(res);
                         }
