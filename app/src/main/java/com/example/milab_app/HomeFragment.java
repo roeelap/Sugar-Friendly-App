@@ -25,8 +25,7 @@ public class HomeFragment extends Fragment {
     public HomeFragment() {
         // TODO: get user from login activity
         // User user = getIntent().getParcelableExtra("user");
-        user =  User.getInstance("Roee", "roee", null, null, null, null);
-
+        user = User.getInstance("Roee", "roee", null, null, null, null);
         // TODO: get dishes from database
         dishes.add(new Dish("Dish 1", new Restaurant("Restaurant 1")));
         dishes.add(new Dish("Dish 2", new Restaurant("Restaurant 2")));
@@ -45,17 +44,17 @@ public class HomeFragment extends Fragment {
                              Bundle savedInstanceState) {
         Log.d(TAG, "created view");
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_home, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_home, container, false);
 
         // setup greeting text
         String greeting = "Good evening " + user.getName() + "!";
-        TextView greetingText = view.findViewById(R.id.greetingText);
+        TextView greetingText = rootView.findViewById(R.id.greetingText);
         greetingText.setText(greeting);
 
         // setup recycler views
-        initDishRecyclerViews(view);
+        initDishRecyclerViews(rootView);
 
-        return view;
+        return rootView;
     }
 
 

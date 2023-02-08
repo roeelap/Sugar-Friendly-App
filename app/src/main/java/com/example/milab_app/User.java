@@ -38,6 +38,4 @@ public class User {
     public JSONArray getFavRestaurants() { return favRestaurants; }
     public JSONArray getRecentFoodTags() { return recentFoodTags; }
     public JSONArray getRecentNutritionTags() { return recentNutritionTags; }
-
-
 }

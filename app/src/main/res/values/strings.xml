@@ -23,4 +23,12 @@
     <string name="title_profile">Profile</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="profileGreetingMessage">Hi Roee!</string>
+    <string name="roee_lapushin">Roee Lapushin</string>
+    <string name="num_of_recommendations">23 recommendations</string>
+    <string name="inbox_button_text">Inbox</string>
+    <string name="settings_button_text">Settings</string>
+    <string name="your_favorites_label">Your favorites</string>
+    <string name="send_us_paragraph">Enjoy the recommendations?\nYou can send us your own recommendations and earn points!</string>
+    <string name="send_recommendation_button_text">Send recommendation</string>
 </resources>
