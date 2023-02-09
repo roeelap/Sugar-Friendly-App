@@ -10,7 +10,6 @@ import android.annotation.SuppressLint;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.util.Log;
 
 import com.google.android.gms.location.FusedLocationProviderClient;

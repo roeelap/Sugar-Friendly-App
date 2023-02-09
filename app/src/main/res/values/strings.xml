@@ -21,8 +21,6 @@
     <string name="title_add">Add</string>
     <string name="title_camera">Camera</string>
     <string name="title_profile">Profile</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="profileGreetingMessage">Hi Roee!</string>
     <string name="roee_lapushin">Roee Lapushin</string>
     <string name="num_of_recommendations">23 recommendations</string>
@@ -31,4 +29,6 @@
     <string name="your_favorites_label">Your favorites</string>
     <string name="send_us_paragraph">Enjoy the recommendations?\nYou can send us your own recommendations and earn points!</string>
     <string name="send_recommendation_button_text">Send recommendation</string>
+    <string name="upload_image_from_device">Upload image from device</string>
+    <string name="upload_image">Upload Image</string>
 </resources>
