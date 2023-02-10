@@ -7,17 +7,10 @@
     android:gravity="center"
     tools:context=".CameraFragment">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/upload_image_from_device"
-        android:textSize="25sp"/>
-
     <com.google.android.material.button.MaterialButton
         android:id="@+id/upload_image_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
         android:gravity="center"
         android:background="#20000000"
         android:text="@string/upload_image"

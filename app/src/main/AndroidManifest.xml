@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:ignore="LockedOrientationActivity">
+    tools:ignore="LockedOrientationActivity"
+    package="com.example.milab_app">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
-        tools:ignore="ScopedStorage" />
+        android:maxSdkVersion="18" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.hardware.camera2.full" />
+    <uses-feature android:name="android.hardware.camera" android:required="true" />
 
     <application
         android:allowBackup="true"
@@ -24,8 +24,21 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <meta-data
+            android:name="com.google.android.actions"
+            android:resource="@xml/file_paths" />
+        <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyA4VcSGbk-S5eAlv5fKl1lk6ZAx1OFAmFw" />
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.example.android.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
 
         <activity
             android:name=".MainActivity"
@@ -42,14 +55,8 @@
         </activity>
 
         <activity
-            android:name=".CameraActivity"
-            android:exported="false"
-            android:screenOrientation="portrait" />
-
-        <activity
-            android:name=".CustomGalleryActivity"
-            android:exported="false"
-            android:screenOrientation="portrait" />
+            android:name=".DisplayImageActivity"
+            android:exported="false" />
     </application>
 
 </manifest>

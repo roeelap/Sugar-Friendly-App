@@ -31,4 +31,5 @@
     <string name="send_recommendation_button_text">Send recommendation</string>
     <string name="upload_image_from_device">Upload image from device</string>
     <string name="upload_image">Upload Image</string>
+    <string name="image_taken_by_the_user">image taken by the user</string>
 </resources>
