@@ -1,4 +1,4 @@
-package com.example.milab_app;
+package com.example.milab_app.fragments;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -17,6 +17,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+
+import com.example.milab_app.DisplayImageActivity;
+import com.example.milab_app.R;
 
 import java.io.File;
 import java.io.IOException;
@@ -39,6 +42,9 @@ public class CameraFragment extends Fragment {
                 new ActivityResultContracts.StartActivityForResult(),
                 result -> {
                     Log.e(TAG, "Got image: " + currentPhotoPath);
+                    if (result.getResultCode() == 0) {
+                        return;
+                    }
                     displayImage();
                 });
 

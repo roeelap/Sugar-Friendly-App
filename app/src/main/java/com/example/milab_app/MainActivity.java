@@ -7,6 +7,15 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.example.milab_app.objects.Dish;
+import com.example.milab_app.fragments.AddFragment;
+import com.example.milab_app.fragments.CameraFragment;
+import com.example.milab_app.fragments.HomeFragment;
+import com.example.milab_app.fragments.MapFragment;
+import com.example.milab_app.fragments.ProfileFragment;
+import com.example.milab_app.objects.Restaurant;
+import com.example.milab_app.utility.DataFetcher;
+import com.example.milab_app.objects.User;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -26,7 +35,10 @@ public class MainActivity extends AppCompatActivity {
 
     // user
     private final User user = User.getInstance("Roee", "roee", null, null, null, null);
-    private ArrayList<Dish> dishes;
+    private ArrayList<Dish> recommendedDishes;
+    private ArrayList<Dish> topRatedDishes;
+    private ArrayList<Dish> newestDishes;
+    private ArrayList<Restaurant> restaurants;
 
     private final Bundle locationBundle = new Bundle();
 
@@ -44,21 +56,17 @@ public class MainActivity extends AppCompatActivity {
         locationBundle.putParcelable("currentDeviceLocation", currentDeviceLocation);
 
         // fetch dishes and load home fragment when app starts
-        fetchAllDishes();
+        fetchData();
 
         // initialize bottom navigation
         initBottomNavigation();
     }
 
-    public User getUser() {
-        return user;
-    }
-
-    public ArrayList<Dish> getDishes() {
-        return dishes;
-    }
-
-
+    public User getUser() { return user; }
+    public ArrayList<Dish> getRecommendedDishes() { return recommendedDishes; }
+    public ArrayList<Dish> getTopRatedDishes() { return topRatedDishes; }
+    public ArrayList<Dish> getNewestDishes() { return newestDishes; }
+    public ArrayList<Restaurant> getRestaurants() { return restaurants; }
 
     /**
      * Initialize bottom navigation buttons
@@ -90,8 +98,8 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void fetchAllDishes() {
-        final DishFetcher fetcher = new DishFetcher(MainActivity.this);
+    private void fetchData() {
+        final DataFetcher fetcher = new DataFetcher(MainActivity.this);
         fetcher.dispatchRequest(response -> {
             if (response.isError) {
                 Log.e(TAG, "Error fetching dishes");
@@ -100,7 +108,10 @@ public class MainActivity extends AppCompatActivity {
             }
 
             Log.d(TAG, "Fetched dishes successfully");
-            dishes = response.dishes;
+            recommendedDishes = response.recommendedDishes;
+            topRatedDishes = response.topRatedDishes;
+            newestDishes = response.newestDishes;
+            restaurants = response.restaurants;
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, homeFragment).commit();
         });
     }

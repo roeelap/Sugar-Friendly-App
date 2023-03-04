@@ -1,4 +1,4 @@
-package com.example.milab_app;
+package com.example.milab_app.utility;
 
 import android.content.Context;
 import android.util.Log;
@@ -11,6 +11,9 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.milab_app.objects.Dish;
+import com.example.milab_app.R;
 
 import java.util.List;
 

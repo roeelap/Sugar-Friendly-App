@@ -9,6 +9,8 @@ import androidx.exifinterface.media.ExifInterface;
 import android.os.Bundle;
 import android.widget.ImageView;
 
+import com.example.milab_app.R;
+
 import java.io.IOException;
 
 public class DisplayImageActivity extends AppCompatActivity {

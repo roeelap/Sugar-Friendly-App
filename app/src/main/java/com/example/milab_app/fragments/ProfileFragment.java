@@ -1,4 +1,4 @@
-package com.example.milab_app;
+package com.example.milab_app.fragments;
 
 import android.os.Bundle;
 
@@ -11,6 +11,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.example.milab_app.objects.Dish;
+import com.example.milab_app.utility.DishRecyclerViewAdapter;
+import com.example.milab_app.R;
+import com.example.milab_app.objects.User;
 
 import java.util.ArrayList;
 import java.util.List;

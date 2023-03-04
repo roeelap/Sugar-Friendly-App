@@ -1,5 +1,7 @@
-package com.example.milab_app;
+package com.example.milab_app.fragments;
 
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -9,10 +11,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.milab_app.MainActivity;
+import com.example.milab_app.R;
+import com.example.milab_app.objects.Restaurant;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MapFragment extends Fragment {
 
@@ -21,6 +31,8 @@ public class MapFragment extends Fragment {
     private GoogleMap mMap;
     private LatLng currentDeviceLocation;
     private boolean locationPermissionGranted = false;
+
+    private ArrayList<Restaurant> restaurants;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -37,6 +49,9 @@ public class MapFragment extends Fragment {
             Log.e(TAG, "currentDeviceLocation: " + currentDeviceLocation);
         }
 
+        // get restaurants from main activity
+        restaurants = ((MainActivity) requireActivity()).getRestaurants();
+
         // init map
         SupportMapFragment supportMapFragment = (SupportMapFragment) getChildFragmentManager()
                 .findFragmentById(R.id.google_map);
@@ -49,6 +64,7 @@ public class MapFragment extends Fragment {
                 googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentDeviceLocation, 12));
             }
             updateLocationUi();
+            createRestaurantMarkers();
         });
 
         return rootView;
@@ -69,5 +85,34 @@ public class MapFragment extends Fragment {
         } catch (SecurityException e) {
             Log.e(TAG,"Exception: %s", e);
         }
+    }
+
+    private void createRestaurantMarkers() {
+        for (Restaurant restaurant : restaurants) {
+            LatLng latLng = getLatLngFromAddress(restaurant);
+            if (latLng != null) {
+                mMap.addMarker(new MarkerOptions().position(latLng).title(restaurant.getName()));
+            }
+        }
+    }
+
+    /**
+     * Get the restaurant's location as a LatLng object from its address.
+     * @return LatLng object of the restaurant's location
+     */
+    public LatLng getLatLngFromAddress(Restaurant restaurant) {
+        LatLng latLng = null;
+        try {
+            Geocoder geocoder = new Geocoder(requireContext());
+            List<Address> addresses = geocoder.getFromLocationName(restaurant.getAddress(), 1);
+            double latitude= addresses.get(0).getLatitude();
+            double longitude= addresses.get(0).getLongitude();
+            latLng = new LatLng(latitude, longitude);
+        } catch (IOException e) {
+            Log.e(TAG, "getLatLngFromAddress: " + e.getMessage());
+            e.printStackTrace();
+        }
+
+        return latLng;
     }
 }

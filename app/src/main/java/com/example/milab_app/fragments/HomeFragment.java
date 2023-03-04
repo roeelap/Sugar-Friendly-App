@@ -1,4 +1,4 @@
-package com.example.milab_app;
+package com.example.milab_app.fragments;
 
 import android.os.Bundle;
 
@@ -11,25 +11,22 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import com.example.milab_app.MainActivity;
+import com.example.milab_app.objects.Dish;
+import com.example.milab_app.utility.DishRecyclerViewAdapter;
+import com.example.milab_app.R;
+import com.example.milab_app.objects.User;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
 
 public class HomeFragment extends Fragment {
 
     private static final String TAG = "HomePageFragment";
 
-    private User user;
-    private ArrayList<Dish> dishes;
-
-    public HomeFragment() {
-        // TODO: get user from login activity
-        // User user = getIntent().getParcelableExtra("user");
-        user = User.getInstance("Roee", "roee", null, null, null, null);
-        // TODO: get dishes from database
-    }
+    private ArrayList<Dish> recommendedDishes;
+    private ArrayList<Dish> topRatedDishes;
+    private ArrayList<Dish> newestDishes;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -38,8 +35,10 @@ public class HomeFragment extends Fragment {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_home, container, false);
 
-        user =((MainActivity) requireActivity()).getUser();
-        dishes = ((MainActivity) requireActivity()).getDishes();
+        User user = ((MainActivity) requireActivity()).getUser();
+        recommendedDishes = ((MainActivity) requireActivity()).getRecommendedDishes();
+        topRatedDishes = ((MainActivity) requireActivity()).getTopRatedDishes();
+        newestDishes = ((MainActivity) requireActivity()).getNewestDishes();
 
         // setup greeting text
         String greeting = "Good evening " + user.getName() + "!";
@@ -58,18 +57,18 @@ public class HomeFragment extends Fragment {
 
         // init recommendations recycler view
         final RecyclerView recommendations = view.findViewById(R.id.recommendations);
-        initRecyclerView(recommendations);
+        initRecyclerView(recommendations, recommendedDishes);
 
         // init top rated recycler view
         final RecyclerView topRated = view.findViewById(R.id.topRated);
-        initRecyclerView(topRated);
+        initRecyclerView(topRated, topRatedDishes);
 
         // init newest recycler view
         final RecyclerView newest = view.findViewById(R.id.newest);
-        initRecyclerView(newest);
+        initRecyclerView(newest, newestDishes);
     }
 
-    private void initRecyclerView(RecyclerView recyclerView) {
+    private void initRecyclerView(RecyclerView recyclerView, ArrayList<Dish> dishes) {
         Log.d(TAG, "initDishRecyclerView - " + recyclerView.getId() + "");
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         recyclerView.setLayoutManager(linearLayoutManager);

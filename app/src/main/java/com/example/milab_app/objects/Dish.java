@@ -1,4 +1,4 @@
-package com.example.milab_app;
+package com.example.milab_app.objects;
 
 import org.json.JSONArray;
 

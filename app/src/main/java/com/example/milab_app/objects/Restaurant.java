@@ -1,4 +1,4 @@
-package com.example.milab_app;
+package com.example.milab_app.objects;
 
 public class Restaurant {
     private final String name;
@@ -13,16 +13,10 @@ public class Restaurant {
         this.websiteURL = websiteURL;
     }
 
-    public Restaurant(String name) {
-        this.name = name;
-        this.address = "";
-        this.phoneNumber = "";
-        this.websiteURL = "";
-    }
-
     /* getters */
     public String getName() { return name; }
     public String getAddress() { return address; }
     public String getPhoneNumber() { return phoneNumber; }
     public String getWebsiteURL() { return websiteURL; }
+
 }
