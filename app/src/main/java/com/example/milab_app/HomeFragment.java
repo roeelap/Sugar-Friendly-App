@@ -11,32 +11,24 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class HomeFragment extends Fragment {
 
     private static final String TAG = "HomePageFragment";
 
-    private final User user;
-    private final List<Dish> dishes = new ArrayList<>();
+    private User user;
+    private ArrayList<Dish> dishes;
 
     public HomeFragment() {
         // TODO: get user from login activity
         // User user = getIntent().getParcelableExtra("user");
         user = User.getInstance("Roee", "roee", null, null, null, null);
         // TODO: get dishes from database
-        dishes.add(new Dish("Dish 1", new Restaurant("Restaurant 1")));
-        dishes.add(new Dish("Dish 2", new Restaurant("Restaurant 2")));
-        dishes.add(new Dish("Dish 3", new Restaurant("Restaurant 3")));
-        dishes.add(new Dish("Dish 4", new Restaurant("Restaurant 4")));
-        dishes.add(new Dish("Dish 5", new Restaurant("Restaurant 5")));
-        dishes.add(new Dish("Dish 6", new Restaurant("Restaurant 6")));
-        dishes.add(new Dish("Dish 7", new Restaurant("Restaurant 7")));
-        dishes.add(new Dish("Dish 8", new Restaurant("Restaurant 8")));
-        dishes.add(new Dish("Dish 9", new Restaurant("Restaurant 9")));
-        dishes.add(new Dish("Dish 10", new Restaurant("Restaurant 10")));
     }
 
     @Override
@@ -45,6 +37,9 @@ public class HomeFragment extends Fragment {
         Log.d(TAG, "created view");
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_home, container, false);
+
+        user =((MainActivity) requireActivity()).getUser();
+        dishes = ((MainActivity) requireActivity()).getDishes();
 
         // setup greeting text
         String greeting = "Good evening " + user.getName() + "!";

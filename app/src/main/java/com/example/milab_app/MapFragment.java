@@ -1,6 +1,5 @@
 package com.example.milab_app;
 
-import android.location.Location;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -20,7 +19,7 @@ public class MapFragment extends Fragment {
     private static final String TAG = "MapFragment";
 
     private GoogleMap mMap;
-    private Location currentDeviceLocation;
+    private LatLng currentDeviceLocation;
     private boolean locationPermissionGranted = false;
 
     @Override
@@ -30,11 +29,12 @@ public class MapFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_map, container, false);
 
         // get location permission and current device location from main activity
+        Log.e(TAG, "onCreateView: " + getArguments());
         if (getArguments() != null) {
             locationPermissionGranted = getArguments().getBoolean("locationPermissionGranted");
             currentDeviceLocation = getArguments().getParcelable("currentDeviceLocation");
-            Log.d(TAG, "locationPermissionGranted: " + locationPermissionGranted);
-            Log.d(TAG, "currentDeviceLocation: " + currentDeviceLocation);
+            Log.e(TAG, "locationPermissionGranted: " + locationPermissionGranted);
+            Log.e(TAG, "currentDeviceLocation: " + currentDeviceLocation);
         }
 
         // init map
@@ -46,9 +46,7 @@ public class MapFragment extends Fragment {
             mMap = googleMap;
             // move camera to current location
             if (currentDeviceLocation != null) {
-                googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
-                        new LatLng(currentDeviceLocation.getLatitude(), currentDeviceLocation.getLongitude()), 15
-                ));
+                googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentDeviceLocation, 12));
             }
             updateLocationUi();
         });
@@ -67,7 +65,6 @@ public class MapFragment extends Fragment {
             } else {
                 mMap.setMyLocationEnabled(false);
                 mMap.getUiSettings().setMyLocationButtonEnabled(false);
-                currentDeviceLocation = null;
             }
         } catch (SecurityException e) {
             Log.e(TAG,"Exception: %s", e);

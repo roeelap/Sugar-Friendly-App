@@ -24,8 +24,9 @@ public class DishRecyclerViewAdapter extends RecyclerView.Adapter<DishRecyclerVi
         dishes = d;
     }
 
+    @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         Log.d(TAG, "onCreateViewHolder: new view requested");
         View view = LayoutInflater.from(context)
                 .inflate(R.layout.layout_dish_list_item, parent, false);
@@ -36,19 +37,16 @@ public class DishRecyclerViewAdapter extends RecyclerView.Adapter<DishRecyclerVi
     public void onBindViewHolder(final ViewHolder holder, int position) {
         Dish dish = dishes.get(position);
         holder.dishName.setText(dish.getName());
-        holder.restaurant.setText(dish.getRestaurant().getName());
+        holder.restaurant.setText(dish.getRestaurantName());
         holder.dishImage.setImageResource(R.drawable.sushi);
 
-        holder.dishImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d(TAG, "onClick: " + holder.dishName.getText());
-                Toast.makeText(v.getContext(), "Clicked on " + holder.dishName.getText(), Toast.LENGTH_SHORT).show();
-            }
+        holder.dishImage.setOnClickListener(v -> {
+            Log.d(TAG, "onClick: " + holder.dishName.getText());
+            Toast.makeText(v.getContext(), "Clicked on " + holder.dishName.getText(), Toast.LENGTH_SHORT).show();
         });
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
         public final TextView dishName;
         public final TextView restaurant;
         public final ImageView dishImage;

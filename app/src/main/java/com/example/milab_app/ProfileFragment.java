@@ -26,16 +26,16 @@ public class ProfileFragment extends Fragment {
         // User user = getIntent().getParcelableExtra("user");
         user = User.getInstance("Roee", "roee", null, null, null, null);
         // TODO: get dishes from database
-        dishes.add(new Dish("Dish 1", new Restaurant("Restaurant 1")));
-        dishes.add(new Dish("Dish 2", new Restaurant("Restaurant 2")));
-        dishes.add(new Dish("Dish 3", new Restaurant("Restaurant 3")));
-        dishes.add(new Dish("Dish 4", new Restaurant("Restaurant 4")));
-        dishes.add(new Dish("Dish 5", new Restaurant("Restaurant 5")));
-        dishes.add(new Dish("Dish 6", new Restaurant("Restaurant 6")));
-        dishes.add(new Dish("Dish 7", new Restaurant("Restaurant 7")));
-        dishes.add(new Dish("Dish 8", new Restaurant("Restaurant 8")));
-        dishes.add(new Dish("Dish 9", new Restaurant("Restaurant 9")));
-        dishes.add(new Dish("Dish 10", new Restaurant("Restaurant 10")));
+        dishes.add(new Dish("Dish 1", "Restaurant 1"));
+        dishes.add(new Dish("Dish 2", "Restaurant 2"));
+        dishes.add(new Dish("Dish 3", "Restaurant 3"));
+        dishes.add(new Dish("Dish 4", "Restaurant 4"));
+        dishes.add(new Dish("Dish 5", "Restaurant 5"));
+        dishes.add(new Dish("Dish 6", "Restaurant 6"));
+        dishes.add(new Dish("Dish 7", "Restaurant 7"));
+        dishes.add(new Dish("Dish 8", "Restaurant 8"));
+        dishes.add(new Dish("Dish 9", "Restaurant 9"));
+        dishes.add(new Dish("Dish 10", "Restaurant 10"));
     }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
