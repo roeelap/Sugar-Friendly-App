@@ -52,10 +52,14 @@ public class MapFragment extends Fragment {
         // get restaurants from main activity
         restaurants = ((MainActivity) requireActivity()).getRestaurants();
 
-        // init map
+        initMap();
+
+        return rootView;
+    }
+
+    private void initMap() {
         SupportMapFragment supportMapFragment = (SupportMapFragment) getChildFragmentManager()
                 .findFragmentById(R.id.google_map);
-
         assert supportMapFragment != null;
         supportMapFragment.getMapAsync(googleMap -> {
             mMap = googleMap;
@@ -66,8 +70,6 @@ public class MapFragment extends Fragment {
             updateLocationUi();
             createRestaurantMarkers();
         });
-
-        return rootView;
     }
 
     private void updateLocationUi() {
