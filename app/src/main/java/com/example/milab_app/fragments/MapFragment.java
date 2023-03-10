@@ -10,10 +10,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
-import com.example.milab_app.MainActivity;
 import com.example.milab_app.R;
 import com.example.milab_app.objects.Restaurant;
+import com.example.milab_app.utility.DataFetcher;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -49,12 +50,29 @@ public class MapFragment extends Fragment {
             Log.e(TAG, "currentDeviceLocation: " + currentDeviceLocation);
         }
 
-        // get restaurants from main activity
-        restaurants = ((MainActivity) requireActivity()).getRestaurants();
-
-        initMap();
+        // fetch restaurants and init map
+        if (restaurants == null) {
+            fetchRestaurants(rootView);
+        } else {
+            initMap();
+        }
 
         return rootView;
+    }
+
+    private void fetchRestaurants(View rootView) {
+        final DataFetcher fetcher = new DataFetcher(rootView.getContext());
+        fetcher.fetchRestaurants(response -> {
+            if (response.isError()) {
+                Log.e(TAG, "Error fetching dishes");
+                Toast.makeText(rootView.getContext(), "Error fetching dishes", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            Log.d(TAG, "Fetched dishes successfully");
+            restaurants = response.getRestaurants();
+            initMap();
+        });
     }
 
     private void initMap() {

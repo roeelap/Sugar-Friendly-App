@@ -11,9 +11,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.milab_app.MainActivity;
 import com.example.milab_app.objects.Dish;
+import com.example.milab_app.utility.DataFetcher;
 import com.example.milab_app.utility.DishRecyclerViewAdapter;
 import com.example.milab_app.R;
 import com.example.milab_app.objects.User;
@@ -36,9 +38,6 @@ public class HomeFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_home, container, false);
 
         User user = ((MainActivity) requireActivity()).getUser();
-        recommendedDishes = ((MainActivity) requireActivity()).getRecommendedDishes();
-        topRatedDishes = ((MainActivity) requireActivity()).getTopRatedDishes();
-        newestDishes = ((MainActivity) requireActivity()).getNewestDishes();
 
         // setup greeting text
         String greeting = "Good evening " + user.getName() + "!";
@@ -46,7 +45,11 @@ public class HomeFragment extends Fragment {
         greetingText.setText(greeting);
 
         // setup recycler views
-        initDishRecyclerViews(rootView);
+        if (recommendedDishes == null || topRatedDishes == null || newestDishes == null) {
+            fetchDishes(rootView);
+        } else {
+            initDishRecyclerViews(rootView);
+        }
 
         return rootView;
     }
@@ -74,5 +77,22 @@ public class HomeFragment extends Fragment {
         recyclerView.setLayoutManager(linearLayoutManager);
         DishRecyclerViewAdapter adapter = new DishRecyclerViewAdapter(getContext(), dishes);
         recyclerView.setAdapter(adapter);
+    }
+
+    private void fetchDishes(View rootView) {
+        final DataFetcher fetcher = new DataFetcher(rootView.getContext());
+        fetcher.fetchDishes(response -> {
+            if (response.isError()) {
+                Log.e(TAG, "Error fetching dishes");
+                Toast.makeText(rootView.getContext(), "Error fetching dishes", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            Log.d(TAG, "Fetched dishes successfully");
+            recommendedDishes = response.getRecommendedDishes();
+            topRatedDishes = response.getTopRatedDishes();
+            newestDishes = response.getNewestDishes();
+            initDishRecyclerViews(rootView);
+        });
     }
 }

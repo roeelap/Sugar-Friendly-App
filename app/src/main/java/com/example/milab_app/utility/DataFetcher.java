@@ -21,61 +21,72 @@ public class DataFetcher {
 
     private final String TAG = "DataFetcher";
     private final static String IP_ADDRESS = "10.0.0.38";
-    private final static String REQUEST_URL = "http://" + IP_ADDRESS + ":8080/get-data";
+    private final static String DISHES_REQUEST_URL = "http://" + IP_ADDRESS + ":8080/dishes";
+    private final static String RESTAURANTS_REQUEST_URL = "http://" + IP_ADDRESS + ":8080/restaurants";
 
-    public static class DataResponse {
-        public boolean isError;
-        public ArrayList<Dish> recommendedDishes;
-        public ArrayList<Dish> topRatedDishes;
-        public ArrayList<Dish> newestDishes;
-        public ArrayList<Restaurant> restaurants;
-
-        public DataResponse(boolean isError,
-                            ArrayList<Dish> recommendedDishes, ArrayList<Dish> topRatedDishes ,
-                            ArrayList<Dish> newestDishes, ArrayList<Restaurant> restaurants) {
-            this.isError = isError;
-            this.recommendedDishes = recommendedDishes;
-            this.topRatedDishes = topRatedDishes;
-            this.newestDishes = newestDishes;
-            this.restaurants = restaurants;
-        }
+    public interface DishesResponseListener {
+        void onResponse(DataResponse.DishesResponse response);
     }
 
-    public interface DishResponseListener {
-        void onResponse(DataResponse response);
+    public interface RestaurantsResponseListener {
+        void onResponse(DataResponse.RestaurantResponse response);
     }
 
     public DataFetcher(Context context) {
         _queue = Volley.newRequestQueue(context);
     }
 
-    private DataResponse createErrorResponse() {
-        return new DataResponse(true, null, null, null, null);
+    private DataResponse.DishesResponse createDishesErrorResponse() {
+        return new DataResponse.DishesResponse(true, null, null, null);
     }
 
-    public void dispatchRequest(final DishResponseListener listener) {
-        JsonObjectRequest req = new JsonObjectRequest(Request.Method.GET, REQUEST_URL, null,
+    private DataResponse.RestaurantResponse createRestaurantsErrorResponse() {
+        return new DataResponse.RestaurantResponse(true, null);
+    }
+
+    public void fetchDishes(final DishesResponseListener listener) {
+        JsonObjectRequest req = new JsonObjectRequest(Request.Method.GET, DISHES_REQUEST_URL, null,
                 response -> {
                     Log.d(TAG, "Got response: " + response.toString());
                     try {
                         JSONArray recommendedDishesResponse = response.getJSONArray("recommendedDishes");
                         JSONArray topRatedDishesResponse = response.getJSONArray("topRatedDishes");
                         JSONArray newestDishesResponse = response.getJSONArray("newestDishes");
-                        JSONArray restaurantsResponse = response.getJSONArray("restaurants");
                         ArrayList<Dish> recommendedDishes = parseDishes(recommendedDishesResponse);
                         ArrayList<Dish> topRatedDishes = parseDishes(topRatedDishesResponse);
                         ArrayList<Dish> newestDishes = parseDishes(newestDishesResponse);
-                        ArrayList<Restaurant> restaurants = parseRestaurants(restaurantsResponse);
-                        DataResponse res = new DataResponse(false, recommendedDishes, topRatedDishes, newestDishes, restaurants);
+                        DataResponse.DishesResponse res = new DataResponse.DishesResponse(false, recommendedDishes, topRatedDishes, newestDishes);
                         listener.onResponse(res);
                     }
                     catch (JSONException e) {
                         Log.e(TAG, "Error while parsing response: " + e.getMessage());
-                        listener.onResponse(createErrorResponse());
+                        listener.onResponse(createDishesErrorResponse());
                     }
                 }, error -> {
                     Log.e(TAG, "Error while fetching user: " + error.getMessage());
-                    listener.onResponse(createErrorResponse());
+                    listener.onResponse(createDishesErrorResponse());
+                });
+
+        _queue.add(req);
+    }
+
+    public void fetchRestaurants(final RestaurantsResponseListener listener) {
+        JsonObjectRequest req = new JsonObjectRequest(Request.Method.GET, RESTAURANTS_REQUEST_URL, null,
+                response -> {
+                    Log.d(TAG, "Got response: " + response.toString());
+                    try {
+                        JSONArray restaurantsResponse = response.getJSONArray("restaurants");
+                        ArrayList<Restaurant> restaurants = parseRestaurants(restaurantsResponse);
+                        DataResponse.RestaurantResponse res = new DataResponse.RestaurantResponse(false, restaurants);
+                        listener.onResponse(res);
+                    }
+                    catch (JSONException e) {
+                        Log.e(TAG, "Error while parsing response: " + e.getMessage());
+                        listener.onResponse(createRestaurantsErrorResponse());
+                    }
+                }, error -> {
+                    Log.e(TAG, "Error while fetching user: " + error.getMessage());
+                    listener.onResponse(createRestaurantsErrorResponse());
                 });
 
         _queue.add(req);

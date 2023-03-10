@@ -5,21 +5,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.Toast;
 
-import com.example.milab_app.objects.Dish;
 import com.example.milab_app.fragments.AddFragment;
 import com.example.milab_app.fragments.CameraFragment;
 import com.example.milab_app.fragments.HomeFragment;
 import com.example.milab_app.fragments.MapFragment;
 import com.example.milab_app.fragments.ProfileFragment;
-import com.example.milab_app.objects.Restaurant;
-import com.example.milab_app.utility.DataFetcher;
 import com.example.milab_app.objects.User;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-
-import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -35,10 +29,6 @@ public class MainActivity extends AppCompatActivity {
 
     // user
     private final User user = User.getInstance("Roee", "roee", null, null, null, null);
-    private ArrayList<Dish> recommendedDishes;
-    private ArrayList<Dish> topRatedDishes;
-    private ArrayList<Dish> newestDishes;
-    private ArrayList<Restaurant> restaurants;
 
     private final Bundle locationBundle = new Bundle();
 
@@ -55,18 +45,14 @@ public class MainActivity extends AppCompatActivity {
         locationBundle.putBoolean("locationPermissionGranted", locationPermissionGranted);
         locationBundle.putParcelable("currentDeviceLocation", currentDeviceLocation);
 
-        // fetch dishes and load home fragment when app starts
-        fetchData();
-
         // initialize bottom navigation
         initBottomNavigation();
+
+        // set home fragment as default
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, homeFragment).commit();
     }
 
     public User getUser() { return user; }
-    public ArrayList<Dish> getRecommendedDishes() { return recommendedDishes; }
-    public ArrayList<Dish> getTopRatedDishes() { return topRatedDishes; }
-    public ArrayList<Dish> getNewestDishes() { return newestDishes; }
-    public ArrayList<Restaurant> getRestaurants() { return restaurants; }
 
     /**
      * Initialize bottom navigation buttons
@@ -95,24 +81,6 @@ public class MainActivity extends AppCompatActivity {
                     return true;
             }
             return false;
-        });
-    }
-
-    private void fetchData() {
-        final DataFetcher fetcher = new DataFetcher(MainActivity.this);
-        fetcher.dispatchRequest(response -> {
-            if (response.isError) {
-                Log.e(TAG, "Error fetching dishes");
-                Toast.makeText(MainActivity.this, "Error fetching dishes", Toast.LENGTH_SHORT).show();
-                return;
-            }
-
-            Log.d(TAG, "Fetched dishes successfully");
-            recommendedDishes = response.recommendedDishes;
-            topRatedDishes = response.topRatedDishes;
-            newestDishes = response.newestDishes;
-            restaurants = response.restaurants;
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, homeFragment).commit();
         });
     }
 }
