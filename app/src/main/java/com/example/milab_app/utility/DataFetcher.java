@@ -20,9 +20,10 @@ public class DataFetcher {
     private final RequestQueue _queue;
 
     private final String TAG = "DataFetcher";
-    private final static String IP_ADDRESS = "10.0.0.38";
+    private final static String IP_ADDRESS = "10.0.0.25";
     private final static String DISHES_REQUEST_URL = "http://" + IP_ADDRESS + ":8080/dishes";
     private final static String RESTAURANTS_REQUEST_URL = "http://" + IP_ADDRESS + ":8080/restaurants";
+    private final static String SEARCH_REQUEST_URL = "http://" + IP_ADDRESS + ":8080/search";
 
     public interface DishesResponseListener {
         void onResponse(DataResponse.DishesResponse response);
@@ -30,6 +31,10 @@ public class DataFetcher {
 
     public interface RestaurantsResponseListener {
         void onResponse(DataResponse.RestaurantResponse response);
+    }
+
+    public interface SearchResponseListener {
+        void onResponse(DataResponse.SearchResponse response);
     }
 
     public DataFetcher(Context context) {
@@ -42,6 +47,10 @@ public class DataFetcher {
 
     private DataResponse.RestaurantResponse createRestaurantsErrorResponse() {
         return new DataResponse.RestaurantResponse(true, null);
+    }
+
+    private DataResponse.SearchResponse createSearchErrorResponse() {
+        return new DataResponse.SearchResponse(true, null);
     }
 
     public void fetchDishes(final DishesResponseListener listener) {
@@ -63,7 +72,7 @@ public class DataFetcher {
                         listener.onResponse(createDishesErrorResponse());
                     }
                 }, error -> {
-                    Log.e(TAG, "Error while fetching user: " + error.getMessage());
+                    Log.e(TAG, "Error while fetching dishes: " + error.getMessage());
                     listener.onResponse(createDishesErrorResponse());
                 });
 
@@ -85,10 +94,36 @@ public class DataFetcher {
                         listener.onResponse(createRestaurantsErrorResponse());
                     }
                 }, error -> {
-                    Log.e(TAG, "Error while fetching user: " + error.getMessage());
+                    Log.e(TAG, "Error while fetching restaurants: " + error.getMessage());
                     listener.onResponse(createRestaurantsErrorResponse());
                 });
 
+        _queue.add(req);
+    }
+
+    public void fetchSearchResults(String query, final SearchResponseListener listener) {
+        // Construct the URL for the API endpoint
+        String url = SEARCH_REQUEST_URL + "?query=" + query;
+
+        // Create a new string request
+        JsonObjectRequest req = new JsonObjectRequest(Request.Method.GET, url, null,
+                response -> {
+                    try {
+                        // Parse the JSON response and add each result to the allResults list
+                        JSONArray results = response.getJSONArray("results");
+                        ArrayList<Dish> dishes = parseDishes(results);
+                        DataResponse.SearchResponse res = new DataResponse.SearchResponse(false, dishes);
+                        listener.onResponse(res);
+                    } catch (JSONException e) {
+                        Log.e(TAG, "Error while parsing response: " + e.getMessage());
+                        listener.onResponse(createSearchErrorResponse());
+                    }
+                }, error -> {
+            Log.e(TAG, "Error while fetching search results: " + error.getMessage());
+            listener.onResponse(createSearchErrorResponse());
+        });
+
+        // Add the request to the queue
         _queue.add(req);
     }
 

@@ -33,4 +33,9 @@
     <string name="upload_image">Upload Image</string>
     <string name="image_taken_by_the_user">image taken by the user</string>
     <string name="welcome">Welcome!</string>
+    <string name="rating">rating</string>
+    <string name="exit_button">exit button</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_search">search</string>
 </resources>

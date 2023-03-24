@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.RatingBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -18,12 +17,12 @@ import com.example.milab_app.R;
 
 import java.util.ArrayList;
 
-public class DishRecyclerViewAdapter extends RecyclerView.Adapter<DishRecyclerViewAdapter.ViewHolder> {
-    private static final String TAG = "DishRecyclerViewAdapter";
+public class SearchResultsRecyclerViewAdapter extends RecyclerView.Adapter<SearchResultsRecyclerViewAdapter.ViewHolder> {
+    private static final String TAG = "SearchResultsRecycleViewAdapter";
     private final ArrayList<Dish> dishes;
     private final Context context;
 
-    public DishRecyclerViewAdapter(Context c, ArrayList<Dish> d) {
+    public SearchResultsRecyclerViewAdapter(Context c, ArrayList<Dish> d) {
         context = c;
         dishes = d;
     }
@@ -33,7 +32,7 @@ public class DishRecyclerViewAdapter extends RecyclerView.Adapter<DishRecyclerVi
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         Log.d(TAG, "onCreateViewHolder: new view requested");
         View view = LayoutInflater.from(context)
-                .inflate(R.layout.layout_dish_list_item, parent, false);
+                .inflate(R.layout.search_result_dish_list_item, parent, false);
         return new ViewHolder(view);
     }
 
@@ -43,9 +42,8 @@ public class DishRecyclerViewAdapter extends RecyclerView.Adapter<DishRecyclerVi
         holder.dishName.setText(dish.getName());
         holder.restaurant.setText(dish.getRestaurantName());
         holder.dishImage.setImageResource(R.drawable.sushi);
-        holder.ratingBar.setRating((float) dish.getRating());
 
-        holder.dishImage.setOnClickListener(v -> {
+        holder.dishName.setOnClickListener(v -> {
             Log.d(TAG, "onClick: " + holder.dishName.getText());
             ((MainActivity) context).showDishDetailsPopup(dish);
         });
@@ -54,7 +52,6 @@ public class DishRecyclerViewAdapter extends RecyclerView.Adapter<DishRecyclerVi
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public final TextView dishName;
         public final TextView restaurant;
-        public final RatingBar ratingBar;
         public final ImageView dishImage;
 
         public ViewHolder(View view) {
@@ -62,7 +59,6 @@ public class DishRecyclerViewAdapter extends RecyclerView.Adapter<DishRecyclerVi
             dishName = view.findViewById(R.id.dishName);
             restaurant = view.findViewById(R.id.restaurantName);
             dishImage = view.findViewById(R.id.dishImage);
-            ratingBar = view.findViewById(R.id.ratingBar);
         }
 
         @NonNull

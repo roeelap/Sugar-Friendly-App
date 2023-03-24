@@ -55,4 +55,17 @@ public class DataResponse {
             return restaurants;
         }
     }
+
+    public static class SearchResponse extends DataResponse {
+        private final ArrayList<Dish> searchResults;
+
+        public SearchResponse(boolean isError, ArrayList<Dish> searchResults) {
+            super(isError);
+            this.searchResults = searchResults;
+        }
+
+        public ArrayList<Dish> getSearchResults() {
+            return searchResults;
+        }
+    }
 }

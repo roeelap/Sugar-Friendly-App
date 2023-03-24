@@ -54,34 +54,15 @@ public class HomeFragment extends Fragment {
         return rootView;
     }
 
-
-    private void initDishRecyclerViews(View view) {
-        Log.d(TAG, "initDishRecyclerViews");
-
-        // init recommendations recycler view
-        final RecyclerView recommendations = view.findViewById(R.id.recommendations);
-        initRecyclerView(recommendations, recommendedDishes);
-
-        // init top rated recycler view
-        final RecyclerView topRated = view.findViewById(R.id.topRated);
-        initRecyclerView(topRated, topRatedDishes);
-
-        // init newest recycler view
-        final RecyclerView newest = view.findViewById(R.id.newest);
-        initRecyclerView(newest, newestDishes);
-    }
-
-    private void initRecyclerView(RecyclerView recyclerView, ArrayList<Dish> dishes) {
-        Log.d(TAG, "initDishRecyclerView - " + recyclerView.getId() + "");
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
-        recyclerView.setLayoutManager(linearLayoutManager);
-        DishRecyclerViewAdapter adapter = new DishRecyclerViewAdapter(getContext(), dishes);
-        recyclerView.setAdapter(adapter);
-    }
-
     private void fetchDishes(View rootView) {
+        Log.d(TAG, "fetchDishes");
+        // show progress bar
+        ((MainActivity) requireActivity()).showProgressBar();
+
         final DataFetcher fetcher = new DataFetcher(rootView.getContext());
         fetcher.fetchDishes(response -> {
+            // hide progress bar
+            ((MainActivity) requireActivity()).hideProgressBar();
             if (response.isError()) {
                 Log.e(TAG, "Error fetching dishes");
                 Toast.makeText(rootView.getContext(), "Error fetching dishes", Toast.LENGTH_SHORT).show();
@@ -94,5 +75,32 @@ public class HomeFragment extends Fragment {
             newestDishes = response.getNewestDishes();
             initDishRecyclerViews(rootView);
         });
+    }
+
+    private void initDishRecyclerViews(View view) {
+        Log.d(TAG, "initDishRecyclerViews");
+
+        // init recommendations recycler view
+        final RecyclerView recommendations = view.findViewById(R.id.recommendations);
+        initRecyclerView(recommendations, recommendedDishes);
+        view.findViewById(R.id.recommendationsLabel).setVisibility(View.VISIBLE);
+
+        // init top rated recycler view
+        final RecyclerView topRated = view.findViewById(R.id.topRated);
+        initRecyclerView(topRated, topRatedDishes);
+        view.findViewById(R.id.topRatedLabel).setVisibility(View.VISIBLE);
+
+        // init newest recycler view
+        final RecyclerView newest = view.findViewById(R.id.newest);
+        initRecyclerView(newest, newestDishes);
+        view.findViewById(R.id.newestLabel).setVisibility(View.VISIBLE);
+    }
+
+    private void initRecyclerView(RecyclerView recyclerView, ArrayList<Dish> dishes) {
+        Log.d(TAG, "initDishRecyclerView - " + recyclerView.getId() + "");
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+        recyclerView.setLayoutManager(linearLayoutManager);
+        DishRecyclerViewAdapter adapter = new DishRecyclerViewAdapter(getContext(), dishes);
+        recyclerView.setAdapter(adapter);
     }
 }

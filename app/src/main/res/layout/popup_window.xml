@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/popup_window_background"
+    android:paddingHorizontal="20dp"
+    android:paddingVertical="10dp">
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnClosePopup"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_gravity="end"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/baseline_close_24"
+        android:contentDescription="@string/exit_button"
+        tools:ignore="RedundantDescriptionCheck,TouchTargetSizeCheck" />
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        app:cardCornerRadius="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginBottom="10dp">
+
+        <ImageView
+            android:id="@+id/dishImagePopup"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:contentDescription="@string/dish_image_description"
+            android:scaleType="fitXY"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="ImageContrastCheck"
+            tools:srcCompat="@tools:sample/avatars" />
+    </com.google.android.material.card.MaterialCardView>
+
+    <TableLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:stretchColumns="*">
+
+        <TableRow
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/dishNamePopup"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/TextView_dish_item_dish_name"
+                android:textColor="#455A64"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <RatingBar
+                android:id="@+id/ratingBarPopup"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:numStars="5"
+                android:isIndicator="true"
+                android:scaleX=".5"
+                android:scaleY=".5"
+                android:transformPivotX="0dp"
+                android:transformPivotY="12dp"
+                android:layout_marginBottom="-20dp"
+                android:layout_marginStart="20dp"
+                tools:ignore="VisualLintBounds" />
+        </TableRow>
+        <TableRow
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/restaurantNamePopup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/TextView_dish_item_restaurant"
+                android:textSize="20sp"
+                android:textColor="#455A64" />
+
+            <Button
+                android:id="@+id/showOnMapBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/title_map"
+                android:backgroundTint="#D9D9D9"
+                android:layout_gravity="start"
+                android:textSize="15sp" />
+        </TableRow>
+    </TableLayout>
+
+
+</LinearLayout>

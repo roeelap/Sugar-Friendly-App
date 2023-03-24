@@ -7,8 +7,8 @@
     android:layout_margin="5dp">
 
     <com.google.android.material.card.MaterialCardView
-        android:layout_width="190dp"
-        android:layout_height="180dp"
+        android:layout_width="230dp"
+        android:layout_height="230dp"
         app:cardCornerRadius="20dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -46,11 +46,25 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/restaurant"
+                android:id="@+id/restaurantName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/TextView_dish_item_restaurant"
                 android:textColor="#455A64" />
+
+            <RatingBar
+                android:id="@+id/ratingBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:numStars="5"
+                android:isIndicator="true"
+                android:scaleX=".4"
+                android:scaleY=".4"
+                android:transformPivotX="0dp"
+                android:transformPivotY="0dp"
+                android:layout_marginBottom="-40dp"
+                android:layout_marginRight="-200dp" />
+
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
 

@@ -18,14 +18,13 @@ import com.example.milab_app.R;
 import com.example.milab_app.objects.User;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class ProfileFragment extends Fragment {
 
     private static final String TAG = "ProfileFragment";
 
     private final User user;
-    private final List<Dish> dishes = new ArrayList<>();
+    private final ArrayList<Dish> dishes = new ArrayList<>();
     public ProfileFragment() {
         // TODO: get user from login activity
         // User user = getIntent().getParcelableExtra("user");
