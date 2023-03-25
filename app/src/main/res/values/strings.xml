@@ -2,19 +2,19 @@
     <string name="app_name">Sugar Friendly</string>
     <string name="profile_picture_description">profile picture</string>
     <string name="greeting_text">Good evening Roee!</string>
-    <string name="textView_what_are_we_eating_today">So what are we eating today?</string>
+    <string name="homePagePromptQuestion">How is your sugar today?</string>
     <string name="EditText_search_bar_hint">Search</string>
     <string name="dish_image_description">dish_image</string>
     <string name="TextView_dish_item_dish_name">Dish name</string>
     <string name="TextView_dish_item_restaurant">Restaurant</string>
     <string name="TextView_recommendations_label">Recommendations</string>
-    <string name="TextView_top_rated_label">Top rated</string>
+    <string name="TextView_top_rated_label">Community’s top rated</string>
     <string name="navbar_home_button_text">Home</string>
     <string name="navbar_map_button_text">Map</string>
     <string name="navbar_plus_button_text">Plus</string>
     <string name="navbar_camera_button_text">Camera</string>
     <string name="navbar_profile_button_text">Profile</string>
-    <string name="TextView_newest_label">Newest</string>
+    <string name="TextView_newest_label">Community’s newest additions</string>
     <string name="title_activity_main">MainActivity</string>
     <string name="title_home">Home</string>
     <string name="title_map">Map</string>
@@ -35,7 +35,8 @@
     <string name="welcome">Welcome!</string>
     <string name="rating">rating</string>
     <string name="exit_button">exit button</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_search">search</string>
+    <string name="low">Low</string>
+    <string name="high">High</string>
+    <string name="sugar_rating">sugar rating</string>
 </resources>

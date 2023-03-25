@@ -9,15 +9,17 @@ public class Dish {
     protected JSONArray nutritionTags;
     protected int likes;
     protected double rating;
+    protected double sugarRating;
 
     public Dish(String name, String restaurantName, JSONArray foodTags, JSONArray nutritionTags,
-                int likes, double rating) {
+                int likes, double rating, double sugarRating) {
         this.name = name;
         this.restaurantName = restaurantName;
         this.foodTags = foodTags;
         this.nutritionTags = nutritionTags;
         this.likes = likes;
         this.rating = rating;
+        this.sugarRating = sugarRating;
     }
 
     public Dish(String name, String restaurantName) {
@@ -27,6 +29,7 @@ public class Dish {
         this.nutritionTags = new JSONArray();
         this.likes = 0;
         this.rating = 0.0;
+        this.sugarRating = 0.0;
     }
 
     /* getters */
@@ -36,4 +39,6 @@ public class Dish {
     public JSONArray getNutritionTags() { return nutritionTags; }
     public int getLikes() { return likes; }
     public double getRating() { return rating; }
+
+    public double getSugarRating() { return sugarRating; }
 }

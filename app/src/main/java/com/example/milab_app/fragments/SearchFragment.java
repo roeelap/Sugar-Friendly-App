@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -55,7 +56,7 @@ public class SearchFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                updateResults(rootView, s.toString());
+                fetchResults(rootView, s.toString());
             }
 
             @Override
@@ -63,23 +64,30 @@ public class SearchFragment extends Fragment {
             }
         });
 
+        createSearchButtons(rootView);
+
         return rootView;
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    private void updateResults(View rootView, String query) {
+    private void fetchResults(View rootView, String query) {
         // Clear the current results
         allResults.clear();
         adapter.notifyDataSetChanged();
 
         if (query.isEmpty()) {
             adapter.notifyDataSetChanged();
+            (rootView.findViewById(R.id.searchButtons)).setVisibility(View.VISIBLE);
             return;
         }
+
+        // remove the buttons from the screen
+        (rootView.findViewById(R.id.searchButtons)).setVisibility(View.GONE);
 
         // show progress bar
         ((MainActivity) requireActivity()).showProgressBar();
 
+        // Fetch the search results
         final DataFetcher fetcher = new DataFetcher(rootView.getContext());
         fetcher.fetchSearchResults(query, response -> {
             // hide progress bar
@@ -98,5 +106,22 @@ public class SearchFragment extends Fragment {
             // Notify the adapter that the data has changed
             adapter.notifyDataSetChanged();
         });
+    }
+
+    private void createSearchButtons(View rootView) {
+        String[] buttons = {"meat", "beef", "italian", "fish", "vegan", "dessert", "hamburger", "sugar free", "reduced sugar", "removable ingredients", "reduced carbs"};
+        for (String button : buttons) {
+            // create a button inside the flexbox
+            Button searchButton = new Button(rootView.getContext());
+            searchButton.setText(button);
+            searchButton.setTextSize(12);
+            // add as a child to the flexbox
+            ((ViewGroup) rootView.findViewById(R.id.searchButtons)).addView(searchButton);
+            // add a listener to the button
+            searchButton.setOnClickListener(v -> {
+                EditText searchBar = rootView.findViewById(R.id.searchBar);
+                searchBar.setText(button);
+            });
+        }
     }
 }

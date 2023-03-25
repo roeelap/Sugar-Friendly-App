@@ -137,7 +137,8 @@ public class DataFetcher {
             JSONArray nutritionTags = dish.getJSONArray("nutritionTags");
             int likes = dish.getInt("likes");
             double rating = dish.getJSONObject("rating").getDouble("$numberDecimal");
-            dishes.add(new Dish(name, restaurantName, foodTags, nutritionTags, likes, rating));
+            double sugarRating = dish.getJSONObject("sugarRating").getDouble("$numberDecimal");
+            dishes.add(new Dish(name, restaurantName, foodTags, nutritionTags, likes, rating, sugarRating));
         }
         return dishes;
     }

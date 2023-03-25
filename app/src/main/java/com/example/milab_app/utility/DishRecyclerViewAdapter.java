@@ -44,6 +44,7 @@ public class DishRecyclerViewAdapter extends RecyclerView.Adapter<DishRecyclerVi
         holder.restaurant.setText(dish.getRestaurantName());
         holder.dishImage.setImageResource(R.drawable.sushi);
         holder.ratingBar.setRating((float) dish.getRating());
+        holder.sugarRating.setText(String.valueOf(dish.getSugarRating()));
 
         holder.dishImage.setOnClickListener(v -> {
             Log.d(TAG, "onClick: " + holder.dishName.getText());
@@ -56,6 +57,7 @@ public class DishRecyclerViewAdapter extends RecyclerView.Adapter<DishRecyclerVi
         public final TextView restaurant;
         public final RatingBar ratingBar;
         public final ImageView dishImage;
+        public final TextView sugarRating;
 
         public ViewHolder(View view) {
             super(view);
@@ -63,6 +65,7 @@ public class DishRecyclerViewAdapter extends RecyclerView.Adapter<DishRecyclerVi
             restaurant = view.findViewById(R.id.restaurantName);
             dishImage = view.findViewById(R.id.dishImage);
             ratingBar = view.findViewById(R.id.ratingBar);
+            sugarRating = view.findViewById(R.id.sugarRating);
         }
 
         @NonNull

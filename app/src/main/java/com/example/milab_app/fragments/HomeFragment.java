@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,6 +30,10 @@ public class HomeFragment extends Fragment {
     private ArrayList<Dish> recommendedDishes;
     private ArrayList<Dish> topRatedDishes;
     private ArrayList<Dish> newestDishes;
+
+    public HomeFragment() {
+        // Required empty public constructor
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -50,6 +55,30 @@ public class HomeFragment extends Fragment {
         } else {
             initDishRecyclerViews(rootView);
         }
+
+        // setup seek bar
+        rootView.findViewById(R.id.HomePagePromptQuestion).setVisibility(View.VISIBLE);
+        rootView.findViewById(R.id.seekBarContainer).setVisibility(View.VISIBLE);
+        SeekBar seekBar = rootView.findViewById(R.id.seekBar);
+        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int sugarLevel, boolean fromUser) {
+                Log.d(TAG, "updateRecyclerViewsToSugarLevel - " + sugarLevel);
+                sugarLevel++; // increment sugarLevel by 1 to avoid 0 sugar rating
+                // update recycler views to show dishes with sugarRating >= sugarLevel
+                updateRecyclerViewToSugarLevel(recommendedDishes, sugarLevel, rootView.findViewById(R.id.recommendations));
+                updateRecyclerViewToSugarLevel(topRatedDishes, sugarLevel, rootView.findViewById(R.id.topRated));
+                updateRecyclerViewToSugarLevel(newestDishes, sugarLevel, rootView.findViewById(R.id.newest));
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+            }
+        });
 
         return rootView;
     }
@@ -100,7 +129,18 @@ public class HomeFragment extends Fragment {
         Log.d(TAG, "initDishRecyclerView - " + recyclerView.getId() + "");
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         recyclerView.setLayoutManager(linearLayoutManager);
-        DishRecyclerViewAdapter adapter = new DishRecyclerViewAdapter(getContext(), dishes);
+        updateRecyclerViewToSugarLevel(dishes, 3, recyclerView);
+    }
+
+    private void updateRecyclerViewToSugarLevel(ArrayList<Dish> dishes, int sugarLevel, RecyclerView recyclerView) {
+        Log.d(TAG, "updateRecyclerViewToSugarLevel - " + sugarLevel);
+        ArrayList<Dish> filteredDishes = new ArrayList<>();
+        for (Dish dish : dishes) {
+            if (dish.getSugarRating() >= sugarLevel) {
+                filteredDishes.add(dish);
+            }
+        }
+        DishRecyclerViewAdapter adapter = new DishRecyclerViewAdapter(getContext(), filteredDishes);
         recyclerView.setAdapter(adapter);
     }
 }
