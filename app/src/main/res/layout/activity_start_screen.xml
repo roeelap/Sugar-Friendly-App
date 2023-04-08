@@ -7,11 +7,11 @@
     android:gravity="center"
     tools:context=".StartScreenActivity">
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="@string/welcome"
-        android:textSize="30sp"/>
+        android:layout_weight="1"
+        app:srcCompat="@drawable/sugar_friendly_app_logo"
+        tools:ignore="ContentDescription" />
 </LinearLayout>

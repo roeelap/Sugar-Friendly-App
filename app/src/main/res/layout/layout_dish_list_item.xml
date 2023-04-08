@@ -62,15 +62,32 @@
                 android:scaleY=".35"
                 android:transformPivotX="0dp"
                 android:transformPivotY="0dp"
-                android:layout_marginBottom="-40dp"
-                android:layout_marginRight="-200dp" />
+                android:layout_marginBottom="-35dp"
+                android:layout_marginRight="-200dp"
+                tools:ignore="VisualLintBounds" />
 
-            <TextView
-                android:id="@+id/sugarRating"
+<!--            <TextView-->
+<!--                android:id="@+id/sugarRating"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:textColor="#455A64"-->
+<!--                android:text="@string/sugar_rating"/>-->
+
+            <RatingBar
+                android:id="@+id/sugarRatingBar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="#455A64"
-                android:text="@string/sugar_rating"/>
+                style="@style/spoonRatingBar"
+                android:stepSize="1"
+                android:numStars="5"
+                android:isIndicator="true"
+                android:scaleX=".25"
+                android:scaleY=".25"
+                android:transformPivotX="0dp"
+                android:transformPivotY="0dp"
+                android:layout_marginBottom="-45dp"
+                android:layout_marginRight="-200dp"
+                tools:ignore="VisualLintBounds" />
 
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>

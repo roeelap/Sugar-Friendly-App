@@ -20,7 +20,7 @@ public class DataFetcher {
     private final RequestQueue _queue;
 
     private final String TAG = "DataFetcher";
-    private final static String IP_ADDRESS = "10.0.0.25";
+    private final static String IP_ADDRESS = "10.0.0.14";
     private final static String DISHES_REQUEST_URL = "http://" + IP_ADDRESS + ":8080/dishes";
     private final static String RESTAURANTS_REQUEST_URL = "http://" + IP_ADDRESS + ":8080/restaurants";
     private final static String SEARCH_REQUEST_URL = "http://" + IP_ADDRESS + ":8080/search";

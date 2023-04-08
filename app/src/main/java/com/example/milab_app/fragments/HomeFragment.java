@@ -53,32 +53,8 @@ public class HomeFragment extends Fragment {
         if (recommendedDishes == null || topRatedDishes == null || newestDishes == null) {
             fetchDishes(rootView);
         } else {
-            initDishRecyclerViews(rootView);
+            initHomePageLayout(rootView);
         }
-
-        // setup seek bar
-        rootView.findViewById(R.id.HomePagePromptQuestion).setVisibility(View.VISIBLE);
-        rootView.findViewById(R.id.seekBarContainer).setVisibility(View.VISIBLE);
-        SeekBar seekBar = rootView.findViewById(R.id.seekBar);
-        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int sugarLevel, boolean fromUser) {
-                Log.d(TAG, "updateRecyclerViewsToSugarLevel - " + sugarLevel);
-                sugarLevel++; // increment sugarLevel by 1 to avoid 0 sugar rating
-                // update recycler views to show dishes with sugarRating >= sugarLevel
-                updateRecyclerViewToSugarLevel(recommendedDishes, sugarLevel, rootView.findViewById(R.id.recommendations));
-                updateRecyclerViewToSugarLevel(topRatedDishes, sugarLevel, rootView.findViewById(R.id.topRated));
-                updateRecyclerViewToSugarLevel(newestDishes, sugarLevel, rootView.findViewById(R.id.newest));
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-            }
-        });
 
         return rootView;
     }
@@ -102,27 +78,29 @@ public class HomeFragment extends Fragment {
             recommendedDishes = response.getRecommendedDishes();
             topRatedDishes = response.getTopRatedDishes();
             newestDishes = response.getNewestDishes();
-            initDishRecyclerViews(rootView);
+            initHomePageLayout(rootView);
         });
     }
 
-    private void initDishRecyclerViews(View view) {
+    private void initHomePageLayout(View rootView) {
         Log.d(TAG, "initDishRecyclerViews");
 
         // init recommendations recycler view
-        final RecyclerView recommendations = view.findViewById(R.id.recommendations);
+        final RecyclerView recommendations = rootView.findViewById(R.id.recommendations);
         initRecyclerView(recommendations, recommendedDishes);
-        view.findViewById(R.id.recommendationsLabel).setVisibility(View.VISIBLE);
+        rootView.findViewById(R.id.recommendationsLabel).setVisibility(View.VISIBLE);
 
         // init top rated recycler view
-        final RecyclerView topRated = view.findViewById(R.id.topRated);
+        final RecyclerView topRated = rootView.findViewById(R.id.topRated);
         initRecyclerView(topRated, topRatedDishes);
-        view.findViewById(R.id.topRatedLabel).setVisibility(View.VISIBLE);
+        rootView.findViewById(R.id.topRatedLabel).setVisibility(View.VISIBLE);
 
         // init newest recycler view
-        final RecyclerView newest = view.findViewById(R.id.newest);
+        final RecyclerView newest = rootView.findViewById(R.id.newest);
         initRecyclerView(newest, newestDishes);
-        view.findViewById(R.id.newestLabel).setVisibility(View.VISIBLE);
+        rootView.findViewById(R.id.newestLabel).setVisibility(View.VISIBLE);
+
+        initUpSeekBar(rootView);
     }
 
     private void initRecyclerView(RecyclerView recyclerView, ArrayList<Dish> dishes) {
@@ -142,5 +120,30 @@ public class HomeFragment extends Fragment {
         }
         DishRecyclerViewAdapter adapter = new DishRecyclerViewAdapter(getContext(), filteredDishes);
         recyclerView.setAdapter(adapter);
+    }
+
+    private void initUpSeekBar(View rootView) {
+        rootView.findViewById(R.id.HomePagePromptQuestion).setVisibility(View.VISIBLE);
+        rootView.findViewById(R.id.seekBarContainer).setVisibility(View.VISIBLE);
+        SeekBar seekBar = rootView.findViewById(R.id.seekBar);
+        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int sugarLevel, boolean fromUser) {
+                Log.d(TAG, "updateRecyclerViewsToSugarLevel - " + sugarLevel);
+                sugarLevel++; // increment sugarLevel by 1 to avoid 0 sugar rating
+                // update recycler views to show dishes with sugarRating >= sugarLevel
+                updateRecyclerViewToSugarLevel(recommendedDishes, sugarLevel, rootView.findViewById(R.id.recommendations));
+                updateRecyclerViewToSugarLevel(topRatedDishes, sugarLevel, rootView.findViewById(R.id.topRated));
+                updateRecyclerViewToSugarLevel(newestDishes, sugarLevel, rootView.findViewById(R.id.newest));
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+            }
+        });
     }
 }
