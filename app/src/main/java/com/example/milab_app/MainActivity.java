@@ -4,7 +4,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Point;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Display;
@@ -111,7 +113,6 @@ public class MainActivity extends AppCompatActivity {
     public void showDishDetailsPopup(Dish dish) {
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         @SuppressLint("InflateParams") View popupView = inflater.inflate(R.layout.popup_window, null);
-        setUpPopupView(popupView, dish);
 
         Display display = getWindowManager().getDefaultDisplay();
         Point size = new Point();
@@ -124,14 +125,10 @@ public class MainActivity extends AppCompatActivity {
         popupWindow.setFocusable(true);
         popupWindow.showAtLocation(popupView, Gravity.CENTER, 0, 0);
 
-        popupView.findViewById(R.id.btnClosePopup).setOnClickListener(v -> popupWindow.dismiss());
-        popupView.findViewById(R.id.showOnMapBtn).setOnClickListener(v -> {
-            popupWindow.dismiss();
-            showRestaurantOnMap(dish.getRestaurantName());
-        });
+        setUpPopupView(popupView, popupWindow, dish);
     }
 
-    private void setUpPopupView(View popupView, Dish dish) {
+    private void setUpPopupView(View popupView, PopupWindow popupWindow, Dish dish) {
         TextView dishName = popupView.findViewById(R.id.dishNamePopup);
         dishName.setText(dish.getName());
 
@@ -143,19 +140,25 @@ public class MainActivity extends AppCompatActivity {
 
         ImageView dishImage = popupView.findViewById(R.id.dishImagePopup);
         dishImage.setImageResource(R.drawable.sushi);
+
+        popupView.findViewById(R.id.btnClosePopup).setOnClickListener(v -> popupWindow.dismiss());
+        popupView.findViewById(R.id.showOnMapBtn).setOnClickListener(v -> {
+            popupWindow.dismiss();
+            showAddressInGoogleMaps(dish.getAddress(), dish.getRestaurantName());
+        });
     }
 
     /**
      * Show a restaurant on map. Will open map fragment and focus on the restaurant.
      * @param restaurantName restaurant name
      */
-    public void showRestaurantOnMap(String restaurantName) {
-        Log.e(TAG, "showRestaurantOnMap: " + restaurantName);
-        setFocusRestaurantName(restaurantName);
-        // click on map button and show map fragment
-        //bottomNavigationView.setSelectedItemId(R.id.navigation_map);
-
+    public void showAddressInGoogleMaps(String address, String restaurantName) {
+        Log.e(TAG, "showAddressInGoogleMaps: " + address + " " + restaurantName);
         // TODO: open google maps with restaurant location
+        Uri gmmIntentUri = Uri.parse("geo:0,0?q=" + address + " " + restaurantName);
+        Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+        mapIntent.setPackage("com.google.android.apps.maps");
+        startActivity(mapIntent);
     }
 
     public void showProgressBar() {
