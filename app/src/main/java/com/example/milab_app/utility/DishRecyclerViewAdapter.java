@@ -1,5 +1,8 @@
 package com.example.milab_app.utility;
 
+import static java.lang.String.*;
+
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -37,6 +40,7 @@ public class DishRecyclerViewAdapter extends RecyclerView.Adapter<DishRecyclerVi
         return new ViewHolder(view);
     }
 
+    @SuppressLint("DefaultLocale")
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         Dish dish = dishes.get(position);
@@ -45,6 +49,7 @@ public class DishRecyclerViewAdapter extends RecyclerView.Adapter<DishRecyclerVi
         holder.dishImage.setImageResource(R.drawable.sushi);
         holder.ratingBar.setRating((float) dish.getRating());
         holder.sugarRatingBar.setRating((float) dish.getSugarRating());
+        holder.distanceToDish.setText(format("%.1f km", dish.getDistanceToUser()));
 
         holder.dishImage.setOnClickListener(v -> {
             Log.d(TAG, "onClick: " + holder.dishName.getText());
@@ -58,6 +63,7 @@ public class DishRecyclerViewAdapter extends RecyclerView.Adapter<DishRecyclerVi
         public final RatingBar ratingBar;
         public final ImageView dishImage;
         public final RatingBar sugarRatingBar;
+        public final TextView distanceToDish;
 
         public ViewHolder(View view) {
             super(view);
@@ -66,6 +72,7 @@ public class DishRecyclerViewAdapter extends RecyclerView.Adapter<DishRecyclerVi
             dishImage = view.findViewById(R.id.dishImage);
             ratingBar = view.findViewById(R.id.ratingBar);
             sugarRatingBar = view.findViewById(R.id.sugarRatingBar);
+            distanceToDish = view.findViewById(R.id.distanceToDish);
         }
 
         @NonNull

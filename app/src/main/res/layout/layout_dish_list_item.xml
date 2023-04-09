@@ -35,7 +35,6 @@
             android:layout_marginTop="15dp"
             android:layout_marginHorizontal="10dp">
 
-
             <TextView
                 android:id="@+id/dishName"
                 android:layout_width="match_parent"
@@ -66,12 +65,12 @@
                 android:layout_marginRight="-200dp"
                 tools:ignore="VisualLintBounds" />
 
-<!--            <TextView-->
-<!--                android:id="@+id/sugarRating"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:textColor="#455A64"-->
-<!--                android:text="@string/sugar_rating"/>-->
+            <TextView
+                android:id="@+id/distanceToDish"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="-20dp"
+                android:layout_gravity="end"/>
 
             <RatingBar
                 android:id="@+id/sugarRatingBar"

@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Sugar Friendly</string>
     <string name="profile_picture_description">profile picture</string>
-    <string name="greeting_text">Good evening Roee!</string>
+    <string name="greeting_text">Hello Roee!</string>
     <string name="homePagePromptQuestion">How is your sugar today?</string>
     <string name="EditText_search_bar_hint">Search</string>
     <string name="dish_image_description">dish_image</string>

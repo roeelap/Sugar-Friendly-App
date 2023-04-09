@@ -10,9 +10,11 @@ public class Dish {
     protected int likes;
     protected double rating;
     protected double sugarRating;
+    protected String address;
+    protected double distanceToUser;
 
     public Dish(String name, String restaurantName, JSONArray foodTags, JSONArray nutritionTags,
-                int likes, double rating, double sugarRating) {
+                int likes, double rating, double sugarRating, String address) {
         this.name = name;
         this.restaurantName = restaurantName;
         this.foodTags = foodTags;
@@ -20,6 +22,7 @@ public class Dish {
         this.likes = likes;
         this.rating = rating;
         this.sugarRating = sugarRating;
+        this.address = address;
     }
 
     public Dish(String name, String restaurantName) {
@@ -30,6 +33,7 @@ public class Dish {
         this.likes = 0;
         this.rating = 0.0;
         this.sugarRating = 0.0;
+        this.address = null;
     }
 
     /* getters */
@@ -41,4 +45,11 @@ public class Dish {
     public double getRating() { return rating; }
 
     public double getSugarRating() { return sugarRating; }
+
+    public String getAddress() { return address; }
+
+    public double getDistanceToUser() { return distanceToUser; }
+
+    /* setters */
+    public void setDistanceToUser(double distanceToUser) { this.distanceToUser = distanceToUser; }
 }

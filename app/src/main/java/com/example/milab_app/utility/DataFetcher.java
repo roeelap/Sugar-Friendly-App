@@ -20,7 +20,7 @@ public class DataFetcher {
     private final RequestQueue _queue;
 
     private final String TAG = "DataFetcher";
-    private final static String IP_ADDRESS = "10.0.0.14";
+    private final static String IP_ADDRESS = "10.0.0.12";
     private final static String DISHES_REQUEST_URL = "http://" + IP_ADDRESS + ":8080/dishes";
     private final static String RESTAURANTS_REQUEST_URL = "http://" + IP_ADDRESS + ":8080/restaurants";
     private final static String SEARCH_REQUEST_URL = "http://" + IP_ADDRESS + ":8080/search";
@@ -138,7 +138,8 @@ public class DataFetcher {
             int likes = dish.getInt("likes");
             double rating = dish.getJSONObject("rating").getDouble("$numberDecimal");
             double sugarRating = dish.getJSONObject("sugarRating").getDouble("$numberDecimal");
-            dishes.add(new Dish(name, restaurantName, foodTags, nutritionTags, likes, rating, sugarRating));
+            String address = dish.getString("address");
+            dishes.add(new Dish(name, restaurantName, foodTags, nutritionTags, likes, rating, sugarRating, address));
         }
         return dishes;
     }
