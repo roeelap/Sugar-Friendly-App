@@ -1,5 +1,6 @@
 package com.example.milab_app.utility;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.Log;
 
@@ -9,12 +10,16 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.milab_app.objects.Dish;
 import com.example.milab_app.objects.Restaurant;
+import com.google.android.gms.maps.model.LatLng;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class DataFetcher {
     private final RequestQueue _queue;
@@ -53,8 +58,9 @@ public class DataFetcher {
         return new DataResponse.SearchResponse(true, null);
     }
 
-    public void fetchDishes(final DishesResponseListener listener) {
-        JsonObjectRequest req = new JsonObjectRequest(Request.Method.GET, DISHES_REQUEST_URL, null,
+    public void fetchDishes(final LatLng userLocation, final DishesResponseListener listener) {
+        String url = DISHES_REQUEST_URL + "?lat=" + userLocation.latitude + "&lng=" + userLocation.longitude;
+        JsonObjectRequest req = new JsonObjectRequest(Request.Method.GET, url, null,
                 response -> {
                     Log.d(TAG, "Got response: " + response.toString());
                     try {
@@ -131,15 +137,19 @@ public class DataFetcher {
         ArrayList<Dish> dishes = new ArrayList<>();
         for (int i = 0; i < dishesResponse.length(); i++) {
             JSONObject dish = dishesResponse.getJSONObject(i);
+            Log.e(TAG, "Dish: " + dish.toString());
             String name = dish.getString("name");
             String restaurantName = dish.getString("restaurant");
             JSONArray foodTags = dish.getJSONArray("foodTags");
             JSONArray nutritionTags = dish.getJSONArray("nutritionTags");
             int likes = dish.getInt("likes");
-            double rating = dish.getJSONObject("rating").getDouble("$numberDecimal");
-            double sugarRating = dish.getJSONObject("sugarRating").getDouble("$numberDecimal");
+            double rating = dish.getDouble("rating");
+            double sugarRating = dish.getDouble("sugarRating");
             String address = dish.getString("address");
-            dishes.add(new Dish(name, restaurantName, foodTags, nutritionTags, likes, rating, sugarRating, address));
+            double distanceToUser = dish.getDouble("distanceToUser");
+            Date uploadDate = parseDate(dish.getString("uploadDate"));
+            dishes.add(new Dish(name, restaurantName, foodTags, nutritionTags, likes, rating,
+                    sugarRating, address, distanceToUser, uploadDate));
         }
         return dishes;
     }
@@ -155,5 +165,15 @@ public class DataFetcher {
             restaurants.add(new Restaurant(name, address, phoneNumber, websiteURL));
         }
         return restaurants;
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    private Date parseDate(String date) {
+        try {
+            return new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").parse(date);
+        } catch (ParseException e) {
+            Log.e(TAG, "Error while parsing date: " + e.getMessage());
+            return null;
+        }
     }
 }

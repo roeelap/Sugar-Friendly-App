@@ -2,6 +2,8 @@ package com.example.milab_app.objects;
 
 import org.json.JSONArray;
 
+import java.util.Date;
+
 public class Dish {
     protected String name;
     protected String restaurantName;
@@ -12,9 +14,10 @@ public class Dish {
     protected double sugarRating;
     protected String address;
     protected double distanceToUser;
+    protected Date uploadDate;
 
     public Dish(String name, String restaurantName, JSONArray foodTags, JSONArray nutritionTags,
-                int likes, double rating, double sugarRating, String address) {
+                int likes, double rating, double sugarRating, String address, double distanceToUser, Date uploadDate) {
         this.name = name;
         this.restaurantName = restaurantName;
         this.foodTags = foodTags;
@@ -23,6 +26,8 @@ public class Dish {
         this.rating = rating;
         this.sugarRating = sugarRating;
         this.address = address;
+        this.distanceToUser = distanceToUser;
+        this.uploadDate = uploadDate;
     }
 
     public Dish(String name, String restaurantName) {
@@ -34,22 +39,15 @@ public class Dish {
         this.rating = 0.0;
         this.sugarRating = 0.0;
         this.address = null;
+        this.distanceToUser = 0.0;
+        this.uploadDate = new Date();
     }
 
     /* getters */
     public String getName() { return name; }
     public String getRestaurantName() { return restaurantName; }
-    public JSONArray getFoodTags() { return foodTags; }
-    public JSONArray getNutritionTags() { return nutritionTags; }
-    public int getLikes() { return likes; }
     public double getRating() { return rating; }
-
     public double getSugarRating() { return sugarRating; }
-
     public String getAddress() { return address; }
-
     public double getDistanceToUser() { return distanceToUser; }
-
-    /* setters */
-    public void setDistanceToUser(double distanceToUser) { this.distanceToUser = distanceToUser; }
 }

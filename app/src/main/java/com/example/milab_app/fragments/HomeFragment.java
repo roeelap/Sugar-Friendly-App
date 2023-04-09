@@ -1,7 +1,5 @@
 package com.example.milab_app.fragments;
 
-import android.location.Address;
-import android.location.Geocoder;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -24,9 +22,7 @@ import com.example.milab_app.R;
 import com.example.milab_app.objects.User;
 import com.google.android.gms.maps.model.LatLng;
 
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 
 public class HomeFragment extends Fragment {
 
@@ -73,7 +69,7 @@ public class HomeFragment extends Fragment {
         ((MainActivity) requireActivity()).showProgressBar();
 
         final DataFetcher fetcher = new DataFetcher(rootView.getContext());
-        fetcher.fetchDishes(response -> {
+        fetcher.fetchDishes(userLatLng, response -> {
             // hide progress bar
             ((MainActivity) requireActivity()).hideProgressBar();
             if (response.isError()) {
@@ -84,11 +80,11 @@ public class HomeFragment extends Fragment {
 
             Log.d(TAG, "Fetched dishes successfully");
             recommendedDishes = response.getRecommendedDishes();
-            calcDistancesToAddresses(recommendedDishes, userLatLng);
+
+            // TODO: figure out if we want to get these from the server or calculate them here
             topRatedDishes = response.getTopRatedDishes();
-            calcDistancesToAddresses(topRatedDishes, userLatLng);
             newestDishes = response.getNewestDishes();
-            calcDistancesToAddresses(newestDishes, userLatLng);
+
             initHomePageLayout(rootView);
         });
     }
@@ -156,43 +152,5 @@ public class HomeFragment extends Fragment {
             public void onStopTrackingTouch(SeekBar seekBar) {
             }
         });
-    }
-
-    public LatLng getLatLngFromAddress(String address) {
-        LatLng latLng = null;
-        try {
-            Geocoder geocoder = new Geocoder(requireContext());
-            List<Address> addresses = geocoder.getFromLocationName(address, 1);
-            double latitude= addresses.get(0).getLatitude();
-            double longitude= addresses.get(0).getLongitude();
-            latLng = new LatLng(latitude, longitude);
-        } catch (IOException e) {
-            Log.e(TAG, "getLatLngFromAddress: " + e.getMessage());
-            e.printStackTrace();
-        }
-
-        return latLng;
-    }
-
-    public double calcDistanceToAddress(String address, LatLng userLatLng) {
-        final int R = 6371; // Radius of the earth
-        LatLng addressLatLng = getLatLngFromAddress(address);
-        if (addressLatLng == null || userLatLng == null) {
-            return -1;
-        }
-
-        double latDistance = Math.toRadians(addressLatLng.latitude - userLatLng.latitude);
-        double lonDistance = Math.toRadians(addressLatLng.longitude - userLatLng.longitude);
-        double a = Math.sin(latDistance / 2) * Math.sin(latDistance / 2)
-                + Math.cos(Math.toRadians(userLatLng.latitude)) * Math.cos(Math.toRadians(addressLatLng.latitude))
-                * Math.sin(lonDistance / 2) * Math.sin(lonDistance / 2);
-        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-        return R * c;
-    }
-
-    public void calcDistancesToAddresses(ArrayList<Dish> dishes, LatLng userLatLng) {
-        for (Dish dish : dishes) {
-            dish.setDistanceToUser(calcDistanceToAddress(dish.getAddress(), userLatLng));
-        }
     }
 }
