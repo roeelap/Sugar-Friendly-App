@@ -25,10 +25,12 @@ public class DataFetcher {
     private final RequestQueue _queue;
 
     private final String TAG = "DataFetcher";
-    private final static String IP_ADDRESS = "10.0.0.12";
-    private final static String DISHES_REQUEST_URL = "http://" + IP_ADDRESS + ":8080/dishes";
-    private final static String RESTAURANTS_REQUEST_URL = "http://" + IP_ADDRESS + ":8080/restaurants";
-    private final static String SEARCH_REQUEST_URL = "http://" + IP_ADDRESS + ":8080/search";
+
+    private final static String URL = "https://handsome-teal-sheath-dress.cyclic.app";
+//    private final static String IP_ADDRESS = "10.0.0.12";
+    private final static String DISHES_REQUEST_URL = URL + "/dishes";
+    private final static String RESTAURANTS_REQUEST_URL = URL + "/restaurants";
+    private final static String SEARCH_REQUEST_URL = URL + "/search";
 
     public interface DishesResponseListener {
         void onResponse(DataResponse.DishesResponse response);
@@ -107,9 +109,9 @@ public class DataFetcher {
         _queue.add(req);
     }
 
-    public void fetchSearchResults(String query, final SearchResponseListener listener) {
+    public void fetchSearchResults(String query, LatLng userLocation, final SearchResponseListener listener) {
         // Construct the URL for the API endpoint
-        String url = SEARCH_REQUEST_URL + "?query=" + query;
+        String url = SEARCH_REQUEST_URL + "?query=" + query + "&lat=" + userLocation.latitude + "&lng=" + userLocation.longitude;
 
         // Create a new string request
         JsonObjectRequest req = new JsonObjectRequest(Request.Method.GET, url, null,

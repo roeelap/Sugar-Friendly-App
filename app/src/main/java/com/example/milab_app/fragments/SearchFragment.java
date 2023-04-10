@@ -22,6 +22,7 @@ import com.example.milab_app.R;
 import com.example.milab_app.objects.Dish;
 import com.example.milab_app.utility.DataFetcher;
 import com.example.milab_app.utility.SearchResultsRecyclerViewAdapter;
+import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
 
@@ -33,10 +34,15 @@ public class SearchFragment extends Fragment {
     private ArrayList<Dish> allResults;
     private SearchResultsRecyclerViewAdapter adapter;
 
+    private LatLng userLatLng;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_search, container, false);
         EditText searchBar = rootView.findViewById(R.id.searchBar);
+
+        // Get the user's location
+        userLatLng = ((MainActivity) requireActivity()).getCurrentDeviceLocation();
 
         // Initialize the adapter and the array list
         allResults = new ArrayList<>();
@@ -89,7 +95,7 @@ public class SearchFragment extends Fragment {
 
         // Fetch the search results
         final DataFetcher fetcher = new DataFetcher(rootView.getContext());
-        fetcher.fetchSearchResults(query, response -> {
+        fetcher.fetchSearchResults(query, userLatLng, response -> {
             // hide progress bar
             ((MainActivity) requireActivity()).hideProgressBar();
 
