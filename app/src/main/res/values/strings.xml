@@ -39,4 +39,9 @@
     <string name="low">Low</string>
     <string name="high">High</string>
     <string name="sugar_rating">sugar rating</string>
+    <string name="camera">Camera</string>
+    <string name="add_without_photo">Add without photo</string>
+    <string name="camera_roll">Camera Roll</string>
+    <string name="add_a_dish">Add a dish</string>
+    <string name="no_photo">No Photo</string>
 </resources>

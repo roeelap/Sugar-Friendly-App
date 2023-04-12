@@ -47,7 +47,6 @@ public class MainActivity extends AppCompatActivity {
 
     private boolean locationPermissionGranted;
     private LatLng currentDeviceLocation;
-    private String focusRestaurantName;
 
     private ProgressBar progressBar;
 
@@ -74,8 +73,6 @@ public class MainActivity extends AppCompatActivity {
     public User getUser() { return user; }
     public boolean getLocationPermissionGranted() { return locationPermissionGranted; }
     public LatLng getCurrentDeviceLocation() { return currentDeviceLocation; }
-    public String getFocusRestaurantName() { return focusRestaurantName; }
-    public void setFocusRestaurantName(String focusRestaurantName) { this.focusRestaurantName = focusRestaurantName; }
 
     /**
      * Initialize bottom navigation buttons
@@ -93,7 +90,8 @@ public class MainActivity extends AppCompatActivity {
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, searchFragment).commit();
                     return true;
                 case R.id.navigation_add:
-                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, addFragment).commit();
+                    //getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, addFragment).commit();
+                    createAddDishPopup();
                     return true;
                 case R.id.navigation_camera:
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, cameraFragment).commit();
@@ -167,5 +165,16 @@ public class MainActivity extends AppCompatActivity {
 
     public void hideProgressBar() {
         progressBar.setVisibility(View.GONE);
+    }
+
+    public void createAddDishPopup() {
+        @SuppressLint("InflateParams") View popupView = getLayoutInflater().inflate(R.layout.add_dish_popup, null);
+        PopupWindow popupWindow = new PopupWindow(popupView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        popupWindow.setAnimationStyle(R.style.add_dish_popup_animation);
+        popupWindow.setFocusable(true);
+        popupWindow.setOutsideTouchable(true);
+        popupWindow.update();
+        View container = findViewById(R.id.main_layout_container);
+        popupWindow.showAtLocation(container, Gravity.BOTTOM, 0, 0);
     }
 }
