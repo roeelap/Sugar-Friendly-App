@@ -34,12 +34,14 @@ public class SearchFragment extends Fragment {
     private ArrayList<Dish> allResults;
     private SearchResultsRecyclerViewAdapter adapter;
 
+    private EditText searchBar;
+
     private LatLng userLatLng;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_search, container, false);
-        EditText searchBar = rootView.findViewById(R.id.searchBar);
+        searchBar = rootView.findViewById(R.id.searchBar);
 
         // Get the user's location
         userLatLng = ((MainActivity) requireActivity()).getCurrentDeviceLocation();
@@ -57,17 +59,25 @@ public class SearchFragment extends Fragment {
         // Add a listener to the search bar to update the results when the text changes
         searchBar.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
+            @SuppressLint("NotifyDataSetChanged")
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+                allResults.clear();
+                adapter.notifyDataSetChanged();
+                if (s.toString().isEmpty()) {
+                    (rootView.findViewById(R.id.searchButtons)).setVisibility(View.VISIBLE);
+                    return;
+                }
+                // remove the buttons from the screen
+                (rootView.findViewById(R.id.searchButtons)).setVisibility(View.GONE);
+
                 fetchResults(rootView, s.toString());
             }
 
             @Override
-            public void afterTextChanged(Editable s) {
-            }
+            public void afterTextChanged(Editable s) {}
         });
 
         createSearchButtons(rootView);
@@ -77,22 +87,8 @@ public class SearchFragment extends Fragment {
 
     @SuppressLint("NotifyDataSetChanged")
     private void fetchResults(View rootView, String query) {
-        // Clear the current results
-        allResults.clear();
-        adapter.notifyDataSetChanged();
-
-        if (query.isEmpty()) {
-            adapter.notifyDataSetChanged();
-            (rootView.findViewById(R.id.searchButtons)).setVisibility(View.VISIBLE);
-            return;
-        }
-
-        // remove the buttons from the screen
-        (rootView.findViewById(R.id.searchButtons)).setVisibility(View.GONE);
-
         // show progress bar
         ((MainActivity) requireActivity()).showProgressBar();
-
         // Fetch the search results
         final DataFetcher fetcher = new DataFetcher(rootView.getContext());
         fetcher.fetchSearchResults(query, userLatLng, response -> {
@@ -106,6 +102,12 @@ public class SearchFragment extends Fragment {
             }
 
             Log.e(TAG, "Fetched search results successfully");
+
+            // If the search bar is empty, don't update the results
+            if (searchBar.getText().toString().isEmpty()) {
+                return;
+            }
+
             allResults.clear();
             allResults.addAll(response.getSearchResults());
 
