@@ -106,7 +106,7 @@ public class StartScreenActivity extends AppCompatActivity {
     }
 
     private void startApp() {
-        Intent intent = new Intent(this, MainActivity.class);
+        Intent intent = new Intent(this, OnBoardingActivity.class);
         intent.putExtra("locationPermissionGranted", locationPermissionGranted);
         intent.putExtra("currentDeviceLocation", currentDeviceLocation);
         startActivity(intent);
