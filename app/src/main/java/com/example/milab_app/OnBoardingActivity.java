@@ -2,16 +2,20 @@ package com.example.milab_app;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
-import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.material.slider.Slider;
 
 public class OnBoardingActivity extends AppCompatActivity {
 
+    private static final String TAG = "OnBoardingActivity";
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -20,22 +24,18 @@ public class OnBoardingActivity extends AppCompatActivity {
         boolean locationPermissionGranted = getIntent().getBooleanExtra("locationPermissionGranted", false);
         LatLng currentDeviceLocation = getIntent().getParcelableExtra("currentDeviceLocation");
 
-        TextView sugarLevel = findViewById(R.id.sugar_level);
+        TextView sugarLevelTextView = findViewById(R.id.sugar_level);
 
-        // update sugar level text dynamically according to the seekbar
-        SeekBar sugarLevelSeekBar = findViewById(R.id.sugar_level_seekBar);
-        sugarLevelSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                sugarLevel.setText(String.valueOf(progress));
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
+        Slider sugarLevelSlider = findViewById(R.id.sugar_level_slider);
+        sugarLevelSlider.addOnChangeListener((slider, value, fromUser) -> {
+            Log.d(TAG, "updateRecyclerViewsToSugarLevel - " + value);
+            // update recycler views to show dishes with sugarRating >= sugarLevel
+            if (value == slider.getValueTo()) {
+                sugarLevelTextView.setText("HI");
+            } else if (value == slider.getValueFrom()) {
+                sugarLevelTextView.setText("I");
+            } else {
+                sugarLevelTextView.setText(String.valueOf((int) value));
             }
         });
 
@@ -43,7 +43,7 @@ public class OnBoardingActivity extends AppCompatActivity {
         letsStartButton.setOnClickListener(v -> {
             // pass sugar level to the main activity
             Intent intent = new Intent(this, MainActivity.class);
-            intent.putExtra("sugarLevel", sugarLevelSeekBar.getProgress());
+            intent.putExtra("sugarLevel", sugarLevelSlider.getValue());
             intent.putExtra("locationPermissionGranted", locationPermissionGranted);
             intent.putExtra("currentDeviceLocation", currentDeviceLocation);
             startActivity(intent);

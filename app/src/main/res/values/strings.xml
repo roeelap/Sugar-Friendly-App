@@ -36,8 +36,8 @@
     <string name="rating">rating</string>
     <string name="exit_button">exit button</string>
     <string name="title_search">search</string>
-    <string name="low">Low</string>
-    <string name="high">High</string>
+    <string name="i">I</string>
+    <string name="hi">HI</string>
     <string name="sugar_rating">sugar rating</string>
     <string name="camera">Camera</string>
     <string name="add_without_photo">Add without photo</string>
@@ -45,5 +45,5 @@
     <string name="add_a_dish">Add a dish</string>
     <string name="no_photo">No Photo</string>
     <string name="lets_start">Let\'s Start</string>
-    <string name="_50">50</string>
+    <string name="_100">100</string>
 </resources>

@@ -1,5 +1,6 @@
 package com.example.milab_app.fragments;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -10,7 +11,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,6 +21,7 @@ import com.example.milab_app.utility.DishRecyclerViewAdapter;
 import com.example.milab_app.R;
 import com.example.milab_app.objects.User;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.material.slider.Slider;
 
 import java.util.ArrayList;
 
@@ -48,10 +49,9 @@ public class HomeFragment extends Fragment {
         User user = ((MainActivity) requireActivity()).getUser();
         userLatLng = ((MainActivity) requireActivity()).getCurrentDeviceLocation();
 
-        // setup greeting text
-        String greeting = "Good evening " + user.getName() + "!";
-        TextView greetingText = rootView.findViewById(R.id.greetingText);
-        greetingText.setText(greeting);
+        // update greeting text
+        TextView greeting = rootView.findViewById(R.id.greetingText);
+        greeting.setText(String.format("Hello %s!", user.getName()));
 
         // setup recycler views
         if (recommendedDishes == null || topRatedDishes == null || newestDishes == null) {
@@ -129,28 +129,25 @@ public class HomeFragment extends Fragment {
         recyclerView.setAdapter(adapter);
     }
 
+    @SuppressLint("SetTextI18n")
     private void initUpSeekBar(View rootView) {
-        rootView.findViewById(R.id.HomePagePromptQuestion).setVisibility(View.VISIBLE);
-        rootView.findViewById(R.id.seekBarContainer).setVisibility(View.VISIBLE);
-        SeekBar seekBar = rootView.findViewById(R.id.seekBar);
-        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int sugarLevel, boolean fromUser) {
-                Log.d(TAG, "updateRecyclerViewsToSugarLevel - " + sugarLevel);
-                sugarLevel++; // increment sugarLevel by 1 to avoid 0 sugar rating
-                // update recycler views to show dishes with sugarRating >= sugarLevel
-                updateRecyclerViewToSugarLevel(recommendedDishes, sugarLevel, rootView.findViewById(R.id.recommendations));
-                updateRecyclerViewToSugarLevel(topRatedDishes, sugarLevel, rootView.findViewById(R.id.topRated));
-                updateRecyclerViewToSugarLevel(newestDishes, sugarLevel, rootView.findViewById(R.id.newest));
+        TextView sugarLevelTextView = rootView.findViewById(R.id.sugar_level);
+        Slider sugarLevelSlider = rootView.findViewById(R.id.sugar_level_slider);
+        sugarLevelSlider.addOnChangeListener((slider, value, fromUser) -> {
+            Log.d(TAG, "updateRecyclerViewsToSugarLevel - " + value);
+            if (value == slider.getValueTo()) {
+                sugarLevelTextView.setText("HI");
+            } else if (value == slider.getValueFrom()) {
+                sugarLevelTextView.setText("I");
+            } else {
+                sugarLevelTextView.setText(String.valueOf((int) value));
             }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-            }
+            // normalize sugarLevel from the range [50, 150] to [1, 5]
+            int sugarLevel = (int) Math.ceil((value - 50) / 20.0);
+            // update recycler views to show dishes with sugarRating >= sugarLevel
+            updateRecyclerViewToSugarLevel(recommendedDishes, sugarLevel, rootView.findViewById(R.id.recommendations));
+            updateRecyclerViewToSugarLevel(topRatedDishes, sugarLevel, rootView.findViewById(R.id.topRated));
+            updateRecyclerViewToSugarLevel(newestDishes, sugarLevel, rootView.findViewById(R.id.newest));
         });
     }
 }
