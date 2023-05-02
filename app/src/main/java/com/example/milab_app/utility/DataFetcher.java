@@ -27,10 +27,14 @@ public class DataFetcher {
     private final String TAG = "DataFetcher";
 
     private final static String URL = "https://handsome-teal-sheath-dress.cyclic.app";
-//    private final static String IP_ADDRESS = "10.0.0.12";
+    private final static String PING_REQUEST_URL = URL + "/isup";
     private final static String DISHES_REQUEST_URL = URL + "/dishes";
     private final static String RESTAURANTS_REQUEST_URL = URL + "/restaurants";
     private final static String SEARCH_REQUEST_URL = URL + "/search";
+
+    public interface DataResponseListener {
+        void onResponse(DataResponse response);
+    }
 
     public interface DishesResponseListener {
         void onResponse(DataResponse.DishesResponse response);
@@ -48,6 +52,11 @@ public class DataFetcher {
         _queue = Volley.newRequestQueue(context);
     }
 
+
+    private DataResponse createDataErrorResponse() {
+        return new DataResponse(true);
+    }
+
     private DataResponse.DishesResponse createDishesErrorResponse() {
         return new DataResponse.DishesResponse(true, null, null, null);
     }
@@ -59,6 +68,26 @@ public class DataFetcher {
     private DataResponse.SearchResponse createSearchErrorResponse() {
         return new DataResponse.SearchResponse(true, null);
     }
+
+
+    public void pingServer(final DataResponseListener listener) {
+        JsonObjectRequest req = new JsonObjectRequest(Request.Method.GET, PING_REQUEST_URL, null,
+                response -> {
+                    Log.d(TAG, "Got response: " + response.toString());
+                    try {
+                        boolean success = response.has("success") && response.getBoolean("success");
+                        listener.onResponse(new DataResponse(success));
+                    } catch (JSONException e) {
+                        listener.onResponse(createDataErrorResponse());
+                    }
+                }, error -> {
+                    Log.e(TAG, "Error while pinging server: " + error.getMessage());
+                    listener.onResponse(createDataErrorResponse());
+                });
+
+        _queue.add(req);
+    }
+
 
     public void fetchDishes(final LatLng userLocation, final DishesResponseListener listener) {
         String url = DISHES_REQUEST_URL + "?lat=" + userLocation.latitude + "&lng=" + userLocation.longitude;

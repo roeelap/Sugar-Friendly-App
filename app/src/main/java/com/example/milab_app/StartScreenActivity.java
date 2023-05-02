@@ -11,11 +11,14 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
+import com.example.milab_app.utility.DataFetcher;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.Task;
+
 
 public class StartScreenActivity extends AppCompatActivity {
 
@@ -93,19 +96,32 @@ public class StartScreenActivity extends AppCompatActivity {
                         Log.e(TAG, "Exception: %s", task.getException());
                         currentDeviceLocation = new LatLng(32.0853, 34.7818);
                     }
-                    startApp();
+                    pingServer();
                 });
             } else {
                 Log.d(TAG, "Device location not permitted. Using defaults - tel aviv.");
                 currentDeviceLocation = new LatLng(32.0853, 34.7818);
-                startApp();
+                pingServer();
             }
         } catch (SecurityException e) {
             Log.e(TAG, "Exception: %s", e);
         }
     }
 
-    private void startApp() {
+    private void pingServer() {
+        // ping the server to wake it up, so it will be ready when the user will start using the app
+        final DataFetcher fetcher = new DataFetcher(this);
+        fetcher.pingServer(response -> {
+            if (response.isError()) {
+                Log.e(TAG, "Error: Server down");
+                Toast.makeText(this, "Error: Server down", Toast.LENGTH_LONG).show();
+            } else {
+                moveToOnBoarding();
+            }
+        });
+    }
+
+    private void moveToOnBoarding() {
         Intent intent = new Intent(this, OnBoardingActivity.class);
         intent.putExtra("locationPermissionGranted", locationPermissionGranted);
         intent.putExtra("currentDeviceLocation", currentDeviceLocation);
