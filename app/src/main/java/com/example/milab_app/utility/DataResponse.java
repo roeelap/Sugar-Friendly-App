@@ -1,7 +1,6 @@
 package com.example.milab_app.utility;
 
 import com.example.milab_app.objects.Dish;
-import com.example.milab_app.objects.Restaurant;
 
 import java.util.ArrayList;
 
@@ -40,19 +39,6 @@ public class DataResponse {
 
         public ArrayList<Dish> getNewestDishes() {
             return newestDishes;
-        }
-    }
-
-    public static class RestaurantResponse extends DataResponse {
-        private final ArrayList<Restaurant> restaurants;
-
-        public RestaurantResponse(boolean isError, ArrayList<Restaurant> restaurants) {
-            super(isError);
-            this.restaurants = restaurants;
-        }
-
-        public ArrayList<Restaurant> getRestaurants() {
-            return restaurants;
         }
     }
 
