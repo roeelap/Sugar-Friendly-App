@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -59,6 +60,9 @@ public class HomeFragment extends Fragment {
         } else {
             initHomePageLayout(rootView);
         }
+
+        Button sugarLevelPopupButton = rootView.findViewById(R.id.sugarLevelPopupButton);
+        sugarLevelPopupButton.setOnClickListener(v -> toggleSugarLevelPopUp(rootView));
 
         return rootView;
     }
@@ -131,15 +135,19 @@ public class HomeFragment extends Fragment {
 
     @SuppressLint("SetTextI18n")
     private void initUpSeekBar(View rootView) {
+        Button sugarLevelPopupButton = rootView.findViewById(R.id.sugarLevelPopupButton);
         TextView sugarLevelTextView = rootView.findViewById(R.id.sugar_level);
         Slider sugarLevelSlider = rootView.findViewById(R.id.sugar_level_slider);
         sugarLevelSlider.addOnChangeListener((slider, value, fromUser) -> {
             Log.d(TAG, "updateRecyclerViewsToSugarLevel - " + value);
             if (value == slider.getValueTo()) {
+                sugarLevelPopupButton.setText("HI");
                 sugarLevelTextView.setText("HI");
             } else if (value == slider.getValueFrom()) {
+                sugarLevelPopupButton.setText("I");
                 sugarLevelTextView.setText("I");
             } else {
+                sugarLevelPopupButton.setText(String.valueOf((int) value));
                 sugarLevelTextView.setText(String.valueOf((int) value));
             }
             // normalize sugarLevel from the range [50, 150] to [1, 5]
@@ -150,4 +158,16 @@ public class HomeFragment extends Fragment {
             updateRecyclerViewToSugarLevel(newestDishes, sugarLevel, rootView.findViewById(R.id.newest));
         });
     }
+
+    public void toggleSugarLevelPopUp(View rootView) {
+        View sugarLevelPopUp = rootView.findViewById(R.id.sugarLevelPopup);
+        if (sugarLevelPopUp.getVisibility() == View.VISIBLE) {
+            sugarLevelPopUp.setVisibility(View.GONE);
+            return;
+        }
+        sugarLevelPopUp.setVisibility(View.VISIBLE);
+        Button closeButton = sugarLevelPopUp.findViewById(R.id.popupClose);
+        closeButton.setOnClickListener(v -> sugarLevelPopUp.setVisibility(View.GONE));
+    }
+
 }

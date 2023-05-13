@@ -20,7 +20,6 @@ import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
-import com.example.milab_app.fragments.AddFragment;
 import com.example.milab_app.fragments.CameraFragment;
 import com.example.milab_app.fragments.HomeFragment;
 import com.example.milab_app.fragments.ProfileFragment;
@@ -38,7 +37,6 @@ public class MainActivity extends AppCompatActivity {
     BottomNavigationView bottomNavigationView;
     HomeFragment homeFragment = new HomeFragment();
     SearchFragment searchFragment = new SearchFragment();
-    AddFragment addFragment = new AddFragment();
     CameraFragment cameraFragment = new CameraFragment();
     ProfileFragment profileFragment = new ProfileFragment();
 
@@ -71,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public User getUser() { return user; }
-    public boolean getLocationPermissionGranted() { return locationPermissionGranted; }
+
     public LatLng getCurrentDeviceLocation() { return currentDeviceLocation; }
 
     /**
@@ -89,15 +87,8 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.navigation_search:
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, searchFragment).commit();
                     return true;
-                case R.id.navigation_add:
-                    //getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, addFragment).commit();
-                    createAddDishPopup();
-                    return true;
                 case R.id.navigation_camera:
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, cameraFragment).commit();
-                    return true;
-                case R.id.navigation_profile:
-                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, profileFragment).commit();
                     return true;
             }
             return false;
