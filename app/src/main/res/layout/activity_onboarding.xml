@@ -47,7 +47,7 @@
 
         <LinearLayout
             android:id="@+id/seekBarContainer"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
             android:orientation="horizontal"
@@ -57,6 +57,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
                 android:text="@string/i"
                 android:textSize="20sp"
                 android:textStyle="bold"
@@ -68,12 +69,13 @@
                 android:layout_width="240dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:stepSize="1"
+                android:value="100"
                 android:valueFrom="50"
                 android:valueTo="150"
-                android:value="100"
-                android:stepSize="1"
                 app:labelBehavior="gone"
-                app:tickVisible="false"/>
+                app:tickVisible="false"
+                tools:ignore="SpeakableTextPresentCheck" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -95,12 +97,13 @@
             android:textColor="@color/black"/>
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/lets_start"
+            android:id="@+id/lets_find_you_a_dish"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:paddingHorizontal="60dp"
-            android:text="@string/lets_start"
+            android:text="@string/lets_find_you_a_dish"
+            android:textSize="20sp"
             app:backgroundTint="#D9D9D9"
             tools:ignore="SpeakableTextPresentCheck" />
 

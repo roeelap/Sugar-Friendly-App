@@ -15,14 +15,17 @@ import org.json.JSONException;
 import java.util.ArrayList;
 
 public class DataFetcher {
-    private final RequestQueue _queue;
 
     private final String TAG = "DataFetcher";
+
+    private static DataFetcher instance;
+    private final RequestQueue queue;
 
     private final static String URL = "https://handsome-teal-sheath-dress.cyclic.app";
     private final static String PING_REQUEST_URL = URL + "/isup";
     private final static String DISHES_REQUEST_URL = URL + "/dishes";
     private final static String SEARCH_REQUEST_URL = URL + "/search";
+    private final static String UPLOAD_IMAGE_URL = URL + "/uploadImage";
 
     private final DataParser parser = new DataParser();
 
@@ -38,13 +41,20 @@ public class DataFetcher {
         void onResponse(DataResponse.SearchResponse response);
     }
 
-    public DataFetcher(Context context) {
-        _queue = Volley.newRequestQueue(context);
+    private DataFetcher(Context context) {
+        queue = Volley.newRequestQueue(context);
     }
 
 
     private DataResponse createDataErrorResponse() {
         return new DataResponse(true);
+    }
+
+    public static synchronized DataFetcher getInstance(Context context) {
+        if (instance == null) {
+            instance = new DataFetcher(context);
+        }
+        return instance;
     }
 
     private DataResponse.DishesResponse createDishesErrorResponse() {
@@ -53,6 +63,10 @@ public class DataFetcher {
 
     private DataResponse.SearchResponse createSearchErrorResponse() {
         return new DataResponse.SearchResponse(true, null);
+    }
+
+    public<T> void addToRequestQueue(Request<T> request) {
+        queue.add(request);
     }
 
 
@@ -71,7 +85,7 @@ public class DataFetcher {
                     listener.onResponse(createDataErrorResponse());
                 });
 
-        _queue.add(req);
+        queue.add(req);
     }
 
 
@@ -99,7 +113,7 @@ public class DataFetcher {
                     listener.onResponse(createDishesErrorResponse());
                 });
 
-        _queue.add(req);
+        queue.add(req);
     }
 
     public void fetchSearchResults(String query, LatLng userLocation, final SearchResponseListener listener) {
@@ -125,6 +139,6 @@ public class DataFetcher {
         });
 
         // Add the request to the queue
-        _queue.add(req);
+        queue.add(req);
     }
 }

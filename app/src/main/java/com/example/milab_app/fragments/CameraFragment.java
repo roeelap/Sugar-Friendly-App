@@ -20,18 +20,21 @@ import android.widget.Button;
 
 import com.example.milab_app.DisplayImageActivity;
 import com.example.milab_app.R;
+import com.example.milab_app.utility.LogmealAPI;
 
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class CameraFragment extends Fragment {
+public class CameraFragment extends Fragment implements LogmealAPI.Callback {
 
     private static final String TAG = "CameraFragment";
 
     ActivityResultLauncher<Intent> activityResultLauncher;
     private String currentPhotoPath;
+    private File imageFile;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -45,7 +48,12 @@ public class CameraFragment extends Fragment {
                     if (result.getResultCode() == 0) {
                         return;
                     }
-                    displayImage();
+                    // displayImage();
+                    try {
+                        LogmealAPI.sendImage(imageFile, this);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 });
 
         Button uploadImageButton = rootView.findViewById(R.id.upload_image_button);
@@ -58,7 +66,6 @@ public class CameraFragment extends Fragment {
     public void captureImage(View view) {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (takePictureIntent.resolveActivity(requireActivity().getPackageManager()) != null) {
-            File imageFile = null;
             try {
                 imageFile = createImageFile();
             } catch (IOException e) {
@@ -96,5 +103,15 @@ public class CameraFragment extends Fragment {
         // Save a file: path for use with ACTION_VIEW intents
         currentPhotoPath = image.getAbsolutePath();
         return image;
+    }
+
+    @Override
+    public void onSuccess(String responseBody) {
+        Log.e(TAG, "Success: " + responseBody);
+    }
+
+    @Override
+    public void onError(String message) {
+        Log.e(TAG, "Error: " + message);
     }
 }

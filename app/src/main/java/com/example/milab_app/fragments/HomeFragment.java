@@ -68,7 +68,7 @@ public class HomeFragment extends Fragment {
         // show progress bar
         ((MainActivity) requireActivity()).showProgressBar();
 
-        final DataFetcher fetcher = new DataFetcher(rootView.getContext());
+        final DataFetcher fetcher = DataFetcher.getInstance(rootView.getContext());
         fetcher.fetchDishes(userLatLng, response -> {
             // hide progress bar
             ((MainActivity) requireActivity()).hideProgressBar();

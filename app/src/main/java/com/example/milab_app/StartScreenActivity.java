@@ -110,7 +110,7 @@ public class StartScreenActivity extends AppCompatActivity {
 
     private void pingServer() {
         // ping the server to wake it up, so it will be ready when the user will start using the app
-        final DataFetcher fetcher = new DataFetcher(this);
+        final DataFetcher fetcher = DataFetcher.getInstance(this);
         fetcher.pingServer(response -> {
             if (response.isError()) {
                 Log.e(TAG, "Error: Server down");

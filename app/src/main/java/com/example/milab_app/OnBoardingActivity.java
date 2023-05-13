@@ -39,7 +39,7 @@ public class OnBoardingActivity extends AppCompatActivity {
             }
         });
 
-        Button letsStartButton = findViewById(R.id.lets_start);
+        Button letsStartButton = findViewById(R.id.lets_find_you_a_dish);
         letsStartButton.setOnClickListener(v -> {
             // pass sugar level to the main activity
             Intent intent = new Intent(this, MainActivity.class);

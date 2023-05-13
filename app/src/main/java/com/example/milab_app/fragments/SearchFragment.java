@@ -90,7 +90,7 @@ public class SearchFragment extends Fragment {
         // show progress bar
         ((MainActivity) requireActivity()).showProgressBar();
         // Fetch the search results
-        final DataFetcher fetcher = new DataFetcher(rootView.getContext());
+        final DataFetcher fetcher = DataFetcher.getInstance(rootView.getContext());
         fetcher.fetchSearchResults(query, userLatLng, response -> {
             // hide progress bar
             ((MainActivity) requireActivity()).hideProgressBar();

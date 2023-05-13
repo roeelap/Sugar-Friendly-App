@@ -9,7 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.RatingBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -40,15 +39,15 @@ public class DishRecyclerViewAdapter extends RecyclerView.Adapter<DishRecyclerVi
         return new ViewHolder(view);
     }
 
-    @SuppressLint("DefaultLocale")
+    @SuppressLint({"DefaultLocale", "UseCompatLoadingForDrawables"})
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         Dish dish = dishes.get(position);
         holder.dishName.setText(dish.getName());
         holder.restaurant.setText(dish.getRestaurantName());
         holder.dishImage.setImageResource(R.drawable.sushi);
-        holder.ratingBar.setRating((float) dish.getRating());
-        holder.sugarRatingBar.setRating((float) dish.getSugarRating());
+        holder.rating.setText(String.valueOf(dish.getRating()));
+        holder.sugarRating.setText(String.valueOf(dish.getSugarRating()));
         holder.distanceToDish.setText(format("%.1f km", dish.getDistanceToUser()));
 
         holder.dishImage.setOnClickListener(v -> {
@@ -60,19 +59,21 @@ public class DishRecyclerViewAdapter extends RecyclerView.Adapter<DishRecyclerVi
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public final TextView dishName;
         public final TextView restaurant;
-        public final RatingBar ratingBar;
+        public final TextView rating;
         public final ImageView dishImage;
-        public final RatingBar sugarRatingBar;
+        public final TextView sugarRating;
         public final TextView distanceToDish;
+        public final ImageView likeButton;
 
         public ViewHolder(View view) {
             super(view);
             dishName = view.findViewById(R.id.dishName);
             restaurant = view.findViewById(R.id.restaurantName);
             dishImage = view.findViewById(R.id.dishImage);
-            ratingBar = view.findViewById(R.id.ratingBar);
-            sugarRatingBar = view.findViewById(R.id.sugarRatingBar);
             distanceToDish = view.findViewById(R.id.distanceToDish);
+            rating = view.findViewById(R.id.rating);
+            sugarRating = view.findViewById(R.id.sugarRating);
+            likeButton = view.findViewById(R.id.likeButton);
         }
 
         @NonNull
