@@ -50,4 +50,9 @@
     <string name="star">star</string>
     <string name="spoon">spoon</string>
     <string name="your_sugar_now">Your sugar now</string>
+    <string name="dish_name">dish name</string>
+    <string name="restaurant_name">restaurant name</string>
+    <string name="share">Share</string>
+    <string name="map">Map</string>
+    <string name="venue">Venue</string>
 </resources>

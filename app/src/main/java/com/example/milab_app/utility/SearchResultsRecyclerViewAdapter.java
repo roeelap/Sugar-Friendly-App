@@ -45,7 +45,7 @@ public class SearchResultsRecyclerViewAdapter extends RecyclerView.Adapter<Searc
 
         holder.dishName.setOnClickListener(v -> {
             Log.d(TAG, "onClick: " + holder.dishName.getText());
-            ((MainActivity) context).showDishDetailsPopup(dish);
+            ((MainActivity) context).showDishDetailsFragment(dish, "search");
         });
     }
 

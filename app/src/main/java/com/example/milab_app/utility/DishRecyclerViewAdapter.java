@@ -52,7 +52,7 @@ public class DishRecyclerViewAdapter extends RecyclerView.Adapter<DishRecyclerVi
 
         holder.dishImage.setOnClickListener(v -> {
             Log.d(TAG, "onClick: " + holder.dishName.getText());
-            ((MainActivity) context).showDishDetailsPopup(dish);
+            ((MainActivity) context).showDishDetailsFragment(dish, "home");
         });
     }
 

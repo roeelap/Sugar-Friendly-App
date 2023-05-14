@@ -3,24 +3,18 @@ package com.example.milab_app;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.Point;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Display;
 import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.ProgressBar;
-import android.widget.RatingBar;
-import android.widget.TextView;
 
 import com.example.milab_app.fragments.CameraFragment;
+import com.example.milab_app.fragments.DishDetailsFragment;
 import com.example.milab_app.fragments.HomeFragment;
 import com.example.milab_app.fragments.ProfileFragment;
 import com.example.milab_app.fragments.SearchFragment;
@@ -95,47 +89,6 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    /**
-     * Opens a popup window with dish details.
-     * @param dish dish object
-     */
-    public void showDishDetailsPopup(Dish dish) {
-        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        @SuppressLint("InflateParams") View popupView = inflater.inflate(R.layout.popup_window, null);
-
-        Display display = getWindowManager().getDefaultDisplay();
-        Point size = new Point();
-        display.getSize(size);
-        int width = size.x;
-
-        PopupWindow popupWindow = new PopupWindow(popupView);
-        popupWindow.setWidth(width - 100);
-        popupWindow.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
-        popupWindow.setFocusable(true);
-        popupWindow.showAtLocation(popupView, Gravity.CENTER, 0, 0);
-
-        setUpPopupView(popupView, popupWindow, dish);
-    }
-
-    private void setUpPopupView(View popupView, PopupWindow popupWindow, Dish dish) {
-        TextView dishName = popupView.findViewById(R.id.dishNamePopup);
-        dishName.setText(dish.getName());
-
-        TextView restaurantName = popupView.findViewById(R.id.restaurantNamePopup);
-        restaurantName.setText(dish.getRestaurantName());
-
-        RatingBar dishRating = popupView.findViewById(R.id.ratingBarPopup);
-        dishRating.setRating((float) dish.getRating());
-
-        ImageView dishImage = popupView.findViewById(R.id.dishImagePopup);
-        dishImage.setImageResource(R.drawable.sushi);
-
-        popupView.findViewById(R.id.btnClosePopup).setOnClickListener(v -> popupWindow.dismiss());
-        popupView.findViewById(R.id.showOnMapBtn).setOnClickListener(v -> {
-            popupWindow.dismiss();
-            showAddressInGoogleMaps(dish.getAddress(), dish.getRestaurantName());
-        });
-    }
 
     /**
      * Show a restaurant on map. Will open map fragment and focus on the restaurant.
@@ -167,5 +120,21 @@ public class MainActivity extends AppCompatActivity {
         popupWindow.update();
         View container = findViewById(R.id.main_layout_container);
         popupWindow.showAtLocation(container, Gravity.BOTTOM, 0, 0);
+    }
+
+    public void showDishDetailsFragment(Dish dish, String previousFragmentName) {
+        DishDetailsFragment dishDetailsFragment = new DishDetailsFragment(dish, previousFragmentName);
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, dishDetailsFragment).commit();
+    }
+
+    public void showFragment(String fragmentName) {
+        switch (fragmentName) {
+            case "home":
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, homeFragment).commit();
+                break;
+            case "search":
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, searchFragment).commit();
+                break;
+        }
     }
 }
