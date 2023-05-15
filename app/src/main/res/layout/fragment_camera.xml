@@ -16,4 +16,18 @@
         android:text="@string/upload_image"
         android:drawableLeft="@drawable/baseline_camera_alt_24" />
 
+    <ImageView
+        android:id="@+id/captured_image"
+        android:layout_width="wrap_content"
+        android:layout_height="250dp"
+        android:layout_marginTop="20dp"
+        android:gravity="center" />
+
+    <TextView
+        android:id="@+id/results_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_marginTop="20dp" />
+
 </LinearLayout>

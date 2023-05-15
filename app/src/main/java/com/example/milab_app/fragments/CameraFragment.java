@@ -1,39 +1,36 @@
 package com.example.milab_app.fragments;
 
-import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Intent;
-import android.net.Uri;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 
-import com.example.milab_app.DisplayImageActivity;
 import com.example.milab_app.R;
 import com.example.milab_app.utility.LogmealAPI;
 
-import java.io.File;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 
 public class CameraFragment extends Fragment implements LogmealAPI.Callback {
 
     private static final String TAG = "CameraFragment";
 
-    ActivityResultLauncher<Intent> activityResultLauncher;
-    private String currentPhotoPath;
-    private File imageFile;
+    private ActivityResultLauncher<Intent> cameraLauncher;
+    private Bitmap capturedImage;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -41,77 +38,83 @@ public class CameraFragment extends Fragment implements LogmealAPI.Callback {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_camera, container, false);
 
-        activityResultLauncher = registerForActivityResult(
+        cameraLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 result -> {
-                    Log.e(TAG, "Got image: " + currentPhotoPath);
-                    if (result.getResultCode() == 0) {
-                        return;
-                    }
-                    // displayImage();
-                    try {
-                        LogmealAPI.sendImage(imageFile, this);
-                    } catch (Exception e) {
-                        e.printStackTrace();
+                    if (result.getResultCode() == Activity.RESULT_OK) {
+                        Intent data = result.getData();
+                        if (data != null) {
+                            capturedImage = (Bitmap) data.getExtras().get("data");
+                            if (capturedImage == null) {
+                                Log.e(TAG, "capturedImage is null");
+                                return;
+                            }
+                            LogmealAPI.sendImage(capturedImage, this);
+                        }
                     }
                 });
 
         Button uploadImageButton = rootView.findViewById(R.id.upload_image_button);
-        uploadImageButton.setOnClickListener(this::captureImage);
+        uploadImageButton.setOnClickListener(v -> {
+                Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                if (takePictureIntent.resolveActivity(requireActivity().getPackageManager()) != null) {
+                    cameraLauncher.launch(takePictureIntent);
+                }
+        });
 
         return rootView;
     }
 
+    public void updateUI(String response) {
+        Log.e(TAG, "updateUI");
+        try {
+            ImageView capturedImageView = requireView().findViewById(R.id.captured_image);
+            capturedImageView.setImageBitmap(capturedImage);
 
-    public void captureImage(View view) {
-        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if (takePictureIntent.resolveActivity(requireActivity().getPackageManager()) != null) {
-            try {
-                imageFile = createImageFile();
-            } catch (IOException e) {
-                e.printStackTrace();
+            StringBuilder sb = new StringBuilder();
+            JSONObject jsonResponse = new JSONObject(response);
+            JSONArray foodFamilyArray = jsonResponse.getJSONArray("foodFamily");
+            for (int i = 0; i < foodFamilyArray.length(); i++) {
+                JSONObject foodFamily = foodFamilyArray.getJSONObject(i);
+                String name = foodFamily.getString("name");
+                Double prob = foodFamily.getDouble("prob");
+                Log.e(TAG, "foodFamilyName: " + name);
+                sb.append(name).append(": ").append(prob).append("\n");
             }
 
-            if (imageFile != null) {
-                Uri imageUri = FileProvider.getUriForFile(requireContext(),
-                        "com.example.android.fileprovider", imageFile);
-                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
-                activityResultLauncher.launch(takePictureIntent);
+            sb.append("\n");
+
+            JSONArray SegmentationResults = jsonResponse.getJSONArray("segmentation_results");
+            for (int i = 0; i < SegmentationResults.length(); i++) {
+                JSONObject segmentationResult = SegmentationResults.getJSONObject(i);
+                JSONArray recognitionResults = segmentationResult.getJSONArray("recognition_results");
+                for (int j = 0; j < recognitionResults.length(); j++) {
+                    JSONObject recognitionResult = recognitionResults.getJSONObject(j);
+                    String name = recognitionResult.getString("name");
+                    Double prob = recognitionResult.getDouble("prob");
+                    Log.e(TAG, "recognitionResultName: " + name);
+                    sb.append(name).append(": ").append(prob).append("\n");
+                }
             }
+
+
+            TextView resultsTextView = requireView().findViewById(R.id.results_text_view);
+            resultsTextView.setText(sb.toString());
+
+        } catch (Exception e) {
+            Log.e(TAG, "Exception: " + e.getMessage());
         }
     }
 
-    public void displayImage() {
-        Intent intent = new Intent(requireContext(), DisplayImageActivity.class);
-        intent.putExtra("imagePath", currentPhotoPath);
-        startActivity(intent);
-    }
-
-
-    private File createImageFile() throws IOException {
-        // Create an image file name
-        @SuppressLint("SimpleDateFormat")
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String imageFileName = "JPEG_" + timeStamp + "_";
-        File storageDir = requireActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        File image = File.createTempFile(
-                imageFileName,  /* prefix */
-                ".jpg",         /* suffix */
-                storageDir      /* directory */
-        );
-
-        // Save a file: path for use with ACTION_VIEW intents
-        currentPhotoPath = image.getAbsolutePath();
-        return image;
-    }
 
     @Override
-    public void onSuccess(String responseBody) {
-        Log.e(TAG, "Success: " + responseBody);
+    public void onSuccess(String response) {
+        Log.e(TAG, "Success:\n" + response);
+        requireActivity().runOnUiThread(() -> updateUI(response));
     }
 
     @Override
     public void onError(String message) {
-        Log.e(TAG, "Error: " + message);
+        Log.e(TAG, "Error:\n" + message);
     }
 }

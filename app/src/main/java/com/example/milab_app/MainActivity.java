@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
     ProfileFragment profileFragment = new ProfileFragment();
 
     // user
-    private final User user = User.getInstance("Roee", "roee", null, null, null, null);
+    private final User user = User.getInstance("Roee", "roee", null, null, null);
 
     private boolean locationPermissionGranted;
     private LatLng currentDeviceLocation;

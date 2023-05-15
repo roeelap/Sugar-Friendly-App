@@ -28,7 +28,7 @@ public class ProfileFragment extends Fragment {
     public ProfileFragment() {
         // TODO: get user from login activity
         // User user = getIntent().getParcelableExtra("user");
-        user = User.getInstance("Roee", "roee", null, null, null, null);
+        user = User.getInstance("Roee", "roee", null, null, null);
         // TODO: get dishes from database
         dishes.add(new Dish("Dish 1", "Restaurant 1"));
         dishes.add(new Dish("Dish 2", "Restaurant 2"));
