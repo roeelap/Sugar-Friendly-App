@@ -1,8 +1,8 @@
 <resources>
     <string name="app_name">Sugar Friendly</string>
     <string name="profile_picture_description">profile picture</string>
-    <string name="greeting_text">Hello Roee!</string>
-    <string name="homePagePromptQuestion">How is your sugar today?</string>
+    <string name="greeting_text">Hey Roee</string>
+    <string name="homePagePromptQuestion">How is your sugar now?</string>
     <string name="EditText_search_bar_hint">Search</string>
     <string name="dish_image_description">dish_image</string>
     <string name="TextView_dish_item_dish_name">Dish name</string>
@@ -55,4 +55,5 @@
     <string name="share">Share</string>
     <string name="map">Map</string>
     <string name="venue">Venue</string>
+    <string name="let_s_share_a_new_dish">Let\'s share\na new dish!</string>
 </resources>

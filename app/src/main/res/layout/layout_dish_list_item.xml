@@ -8,7 +8,7 @@
 
     <com.google.android.material.card.MaterialCardView
         android:layout_width="260dp"
-        android:layout_height="190dp"
+        android:layout_height="200dp"
         app:cardCornerRadius="15.5dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -30,6 +30,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
+                android:padding="5dp"
                 android:background="@drawable/dish_list_item"
                 android:orientation="vertical">
 
@@ -37,7 +38,7 @@
                     android:id="@+id/dishName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
+                    android:layout_marginHorizontal="10dp"
                     android:text="@string/TextView_dish_item_dish_name"
                     android:textColor="@color/black"
                     android:textSize="16sp"
@@ -47,33 +48,30 @@
                     android:id="@+id/restaurantName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
+                    android:layout_marginHorizontal="10dp"
                     android:text="@string/TextView_dish_item_restaurant"
                     android:textColor="@color/black"
                     android:textSize="16sp" />
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginBottom="5dp"
-                    android:background="#8B8989" />
-
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="15dp"
+                    android:layout_marginHorizontal="10dp"
                     android:orientation="horizontal">
 
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center"
                         android:layout_marginRight="3dp"
                         android:adjustViewBounds="true"
                         android:contentDescription="@string/star"
-                        android:maxWidth="20dp"
-                        android:maxHeight="20dp"
+                        android:maxWidth="15dp"
+                        android:maxHeight="15dp"
                         android:scaleType="fitCenter"
-                        android:src="@drawable/baseline_star_24" />
+                        android:src="@drawable/baseline_star_24"
+                        app:tint="#F7B75B"
+                        tools:ignore="ImageContrastCheck" />
 
                     <TextView
                         android:id="@+id/rating"
@@ -86,13 +84,14 @@
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center"
                         android:layout_marginRight="3dp"
                         android:adjustViewBounds="true"
                         android:contentDescription="@string/spoon"
-                        android:maxWidth="18dp"
-                        android:maxHeight="18dp"
+                        android:maxWidth="13dp"
+                        android:maxHeight="13dp"
                         android:scaleType="fitCenter"
-                        android:src="@drawable/empty_spoon_64" />
+                        android:src="@drawable/full_spoon_64" />
 
                     <TextView
                         android:id="@+id/sugarRating"
@@ -107,18 +106,31 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="10dp"
+                        android:layout_gravity="end"
                         android:textSize="16sp" />
                 </LinearLayout>
             </LinearLayout>
 
-            <ImageView
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/likeButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_marginTop="122dp"
-                android:layout_marginRight="5dp"
-                android:src="@drawable/baseline_favorite_border_24"/>
+                style="@style/Widget.MaterialComponents.Button.Icon"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="130dp"
+                android:layout_marginRight="10dp"
+                android:insetLeft="0dp"
+                android:insetTop="0dp"
+                android:insetRight="0dp"
+                android:insetBottom="0dp"
+                android:stateListAnimator="@null"
+                app:backgroundTint="#F3F3F3"
+                app:icon="@drawable/baseline_favorite_border_24"
+                app:iconGravity="textStart"
+                app:iconPadding="-5dp"
+                app:iconSize="25dp"
+                app:cornerRadius="15dp"
+                tools:ignore="SpeakableTextPresentCheck,VisualLintBounds,TouchTargetSizeCheck" />
 
         </RelativeLayout>
 

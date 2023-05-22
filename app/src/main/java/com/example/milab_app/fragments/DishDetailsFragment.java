@@ -1,7 +1,9 @@
 package com.example.milab_app.fragments;
 
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -13,6 +15,7 @@ import android.widget.TextView;
 import com.example.milab_app.MainActivity;
 import com.example.milab_app.R;
 import com.example.milab_app.objects.Dish;
+import com.google.android.material.button.MaterialButton;
 
 public class DishDetailsFragment extends Fragment {
 
@@ -46,6 +49,26 @@ public class DishDetailsFragment extends Fragment {
 
         Button closeButton = rootView.findViewById(R.id.close_button);
         closeButton.setOnClickListener(v -> ((MainActivity) requireActivity()).showFragment(previousFragmentTag));
+
+        MaterialButton likeButton = rootView.findViewById(R.id.likeButton);
+        likeButton.setOnClickListener(v -> {
+            dish.setIsLiked(!dish.getIsLiked());
+            if (dish.getIsLiked()) {
+                // set the icon to a red filled heart
+                likeButton.setIcon(ContextCompat.getDrawable(rootView.getContext(), R.drawable.baseline_favorite_24));
+                likeButton.setIconTint(ColorStateList.valueOf(ContextCompat.getColor(rootView.getContext(), R.color.red)));
+            } else {
+                // set the icon to a black unfilled heart
+                likeButton.setIcon(ContextCompat.getDrawable(rootView.getContext(), R.drawable.baseline_favorite_border_24));
+                likeButton.setIconTint(ColorStateList.valueOf(ContextCompat.getColor(rootView.getContext(), R.color.black)));
+            }
+
+            // TODO: add dish to user's favorites
+            // ((MainActivity) requireActivity()).getUser().addFavoriteDish(dish);
+            // ((MainActivity) requireActivity()).updateUserInDB();
+            // likeButton.setEnabled(false);
+        });
+
 
         return rootView;
     }

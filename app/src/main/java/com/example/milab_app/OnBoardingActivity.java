@@ -43,6 +43,19 @@ public class OnBoardingActivity extends AppCompatActivity {
         letsStartButton.setOnClickListener(v -> {
             // pass sugar level to the main activity
             Intent intent = new Intent(this, MainActivity.class);
+            intent.putExtra("fragment", "home");
+            intent.putExtra("sugarLevel", sugarLevelSlider.getValue());
+            intent.putExtra("locationPermissionGranted", locationPermissionGranted);
+            intent.putExtra("currentDeviceLocation", currentDeviceLocation);
+            startActivity(intent);
+            finish();
+        });
+
+        Button shareNewDishButton = findViewById(R.id.lets_share_a_new_dish);
+        shareNewDishButton.setOnClickListener(v -> {
+            // pass sugar level to the main activity
+            Intent intent = new Intent(this, MainActivity.class);
+            intent.putExtra("fragment", "camera");
             intent.putExtra("sugarLevel", sugarLevelSlider.getValue());
             intent.putExtra("locationPermissionGranted", locationPermissionGranted);
             intent.putExtra("currentDeviceLocation", currentDeviceLocation);

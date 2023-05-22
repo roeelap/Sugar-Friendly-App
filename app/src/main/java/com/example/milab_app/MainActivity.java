@@ -58,8 +58,22 @@ public class MainActivity extends AppCompatActivity {
         // initialize bottom navigation
         initBottomNavigation();
 
-        // set home fragment as default
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, homeFragment).commit();
+        // check if we need to open a specific fragment
+        String fragment = getIntent().getStringExtra("fragment");
+        if (fragment != null) {
+            switch (fragment) {
+                case "home":
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, homeFragment).commit();
+                    break;
+                case "camera":
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, cameraFragment).commit();
+                    bottomNavigationView.setSelectedItemId(R.id.navigation_camera);
+                    break;
+            }
+        } else {
+            // set home fragment as default
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, homeFragment).commit();
+        }
     }
 
     public User getUser() { return user; }

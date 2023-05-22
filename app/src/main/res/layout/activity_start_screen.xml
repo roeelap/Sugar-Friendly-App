@@ -12,6 +12,6 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        app:srcCompat="@drawable/sugar_friendly_app_logo"
+        app:srcCompat="@drawable/sugar_friendly_logo"
         tools:ignore="ContentDescription" />
 </LinearLayout>

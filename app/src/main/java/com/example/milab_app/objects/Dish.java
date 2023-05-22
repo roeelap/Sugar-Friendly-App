@@ -15,6 +15,7 @@ public class Dish {
     protected String address;
     protected double distanceToUser;
     protected Date uploadDate;
+    protected boolean isLiked;
 
     public Dish(String name, String restaurantName, JSONArray foodTags, JSONArray nutritionTags,
                 int likes, double rating, double sugarRating, String address, double distanceToUser, Date uploadDate) {
@@ -28,6 +29,7 @@ public class Dish {
         this.address = address;
         this.distanceToUser = distanceToUser;
         this.uploadDate = uploadDate;
+        this.isLiked = false;
     }
 
     public Dish(String name, String restaurantName) {
@@ -41,6 +43,7 @@ public class Dish {
         this.address = null;
         this.distanceToUser = 0.0;
         this.uploadDate = new Date();
+        this.isLiked = false;
     }
 
     /* getters */
@@ -50,4 +53,7 @@ public class Dish {
     public double getSugarRating() { return sugarRating; }
     public String getAddress() { return address; }
     public double getDistanceToUser() { return distanceToUser; }
+    public boolean getIsLiked() { return isLiked; }
+
+    public void setIsLiked(boolean isLiked) { this.isLiked = isLiked; }
 }

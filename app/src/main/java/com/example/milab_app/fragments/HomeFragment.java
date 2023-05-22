@@ -84,8 +84,6 @@ public class HomeFragment extends Fragment {
 
             Log.d(TAG, "Fetched dishes successfully");
             recommendedDishes = response.getRecommendedDishes();
-
-            // TODO: figure out if we want to get these from the server or calculate them here
             topRatedDishes = response.getTopRatedDishes();
             newestDishes = response.getNewestDishes();
 
@@ -125,7 +123,7 @@ public class HomeFragment extends Fragment {
         Log.d(TAG, "updateRecyclerViewToSugarLevel - " + sugarLevel);
         ArrayList<Dish> filteredDishes = new ArrayList<>();
         for (Dish dish : dishes) {
-            if (dish.getSugarRating() >= sugarLevel) {
+            if (dish.getSugarRating() <= sugarLevel) {
                 filteredDishes.add(dish);
             }
         }
@@ -152,6 +150,8 @@ public class HomeFragment extends Fragment {
             }
             // normalize sugarLevel from the range [50, 150] to [1, 5]
             int sugarLevel = (int) Math.ceil((value - 50) / 20.0);
+            // reverse sugarLevel to be in the range [6, 2]
+            sugarLevel = 7 - sugarLevel;
             // update recycler views to show dishes with sugarRating >= sugarLevel
             updateRecyclerViewToSugarLevel(recommendedDishes, sugarLevel, rootView.findViewById(R.id.recommendations));
             updateRecyclerViewToSugarLevel(topRatedDishes, sugarLevel, rootView.findViewById(R.id.topRated));

@@ -4,6 +4,7 @@ import static java.lang.String.*;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,11 +13,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.milab_app.MainActivity;
 import com.example.milab_app.objects.Dish;
 import com.example.milab_app.R;
+import com.google.android.material.button.MaterialButton;
 
 import java.util.ArrayList;
 
@@ -54,6 +57,13 @@ public class DishRecyclerViewAdapter extends RecyclerView.Adapter<DishRecyclerVi
             Log.d(TAG, "onClick: " + holder.dishName.getText());
             ((MainActivity) context).showDishDetailsFragment(dish, "home");
         });
+
+        holder.likeButton.setOnClickListener(v -> {
+            Log.d(TAG, "onClick: " + holder.dishName.getText());
+            dish.setIsLiked(!dish.getIsLiked());
+            holder.toggleLikeButton(context, dish.getIsLiked());
+            // TODO: add dish to user's favorites
+        });
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -63,7 +73,7 @@ public class DishRecyclerViewAdapter extends RecyclerView.Adapter<DishRecyclerVi
         public final ImageView dishImage;
         public final TextView sugarRating;
         public final TextView distanceToDish;
-        public final ImageView likeButton;
+        public final MaterialButton likeButton;
 
         public ViewHolder(View view) {
             super(view);
@@ -74,6 +84,18 @@ public class DishRecyclerViewAdapter extends RecyclerView.Adapter<DishRecyclerVi
             rating = view.findViewById(R.id.rating);
             sugarRating = view.findViewById(R.id.sugarRating);
             likeButton = view.findViewById(R.id.likeButton);
+        }
+
+        public void toggleLikeButton(Context context, boolean isLiked) {
+            if (isLiked) {
+                // set the icon to a red filled heart
+                likeButton.setIcon(ContextCompat.getDrawable(context, R.drawable.baseline_favorite_24));
+                likeButton.setIconTint(ColorStateList.valueOf(ContextCompat.getColor(context, R.color.red)));
+            } else {
+                // set the icon to a black unfilled heart
+                likeButton.setIcon(ContextCompat.getDrawable(context, R.drawable.baseline_favorite_border_24));
+                likeButton.setIconTint(ColorStateList.valueOf(ContextCompat.getColor(context, R.color.black)));
+            }
         }
 
         @NonNull
