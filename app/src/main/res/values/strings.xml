@@ -52,8 +52,11 @@
     <string name="your_sugar_now">Your sugar now</string>
     <string name="dish_name">dish name</string>
     <string name="restaurant_name">restaurant name</string>
-    <string name="share">Share</string>
+    <string name="share">Share restaurant</string>
     <string name="map">Map</string>
-    <string name="venue">Venue</string>
+    <string name="restaurant_page">Restaurant page</string>
     <string name="let_s_share_a_new_dish">Let\'s share\na new dish!</string>
+    <string name="excellent">Excellent</string>
+    <string name="okay">Okay</string>
+    <string name="good">Good</string>
 </resources>

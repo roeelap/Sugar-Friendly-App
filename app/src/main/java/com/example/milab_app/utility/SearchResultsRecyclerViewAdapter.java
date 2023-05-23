@@ -42,23 +42,31 @@ public class SearchResultsRecyclerViewAdapter extends RecyclerView.Adapter<Searc
         holder.dishName.setText(dish.getName());
         holder.restaurant.setText(dish.getRestaurantName());
         holder.dishImage.setImageResource(R.drawable.sushi);
+        holder.rating.setText(String.valueOf(dish.getRating()));
+        holder.sugarRating.setText(String.valueOf(dish.getSugarRating()));
 
-        holder.dishName.setOnClickListener(v -> {
+        holder.container.setOnClickListener(v -> {
             Log.d(TAG, "onClick: " + holder.dishName.getText());
             ((MainActivity) context).showDishDetailsFragment(dish, "search");
         });
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
+        public final View container;
         public final TextView dishName;
         public final TextView restaurant;
         public final ImageView dishImage;
+        public final TextView rating;
+        public final TextView sugarRating;
 
         public ViewHolder(View view) {
             super(view);
+            container = view;
             dishName = view.findViewById(R.id.dishName);
             restaurant = view.findViewById(R.id.restaurantName);
             dishImage = view.findViewById(R.id.dishImage);
+            rating = view.findViewById(R.id.rating);
+            sugarRating = view.findViewById(R.id.sugarRating);
         }
 
         @NonNull
