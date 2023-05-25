@@ -8,8 +8,8 @@
 
     <com.google.android.material.card.MaterialCardView
         android:layout_width="260dp"
-        android:layout_height="200dp"
-        app:cardCornerRadius="15.5dp"
+        android:layout_height="220dp"
+        app:cardCornerRadius="15dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="TextSizeCheck">
@@ -117,7 +117,7 @@
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_alignParentEnd="true"
-                android:layout_marginTop="130dp"
+                android:layout_marginTop="150dp"
                 android:layout_marginRight="10dp"
                 android:insetLeft="0dp"
                 android:insetTop="0dp"

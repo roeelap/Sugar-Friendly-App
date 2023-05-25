@@ -5,6 +5,8 @@ import org.json.JSONArray;
 import java.util.Date;
 
 public class Dish {
+
+    protected String id;
     protected String name;
     protected String restaurantName;
     protected JSONArray foodTags;
@@ -17,8 +19,9 @@ public class Dish {
     protected Date uploadDate;
     protected boolean isLiked;
 
-    public Dish(String name, String restaurantName, JSONArray foodTags, JSONArray nutritionTags,
+    public Dish(String id, String name, String restaurantName, JSONArray foodTags, JSONArray nutritionTags,
                 int likes, double rating, double sugarRating, String address, double distanceToUser, Date uploadDate) {
+        this.id = id;
         this.name = name;
         this.restaurantName = restaurantName;
         this.foodTags = foodTags;
@@ -33,6 +36,7 @@ public class Dish {
     }
 
     public Dish(String name, String restaurantName) {
+        this.id = null;
         this.name = name;
         this.restaurantName = restaurantName;
         this.foodTags = new JSONArray();
@@ -47,6 +51,7 @@ public class Dish {
     }
 
     /* getters */
+    public String getId() { return id; }
     public String getName() { return name; }
     public String getRestaurantName() { return restaurantName; }
     public double getRating() { return rating; }

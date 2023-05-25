@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.util.Log;
 
 import com.example.milab_app.objects.Dish;
+import com.example.milab_app.objects.User;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -13,6 +14,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 
 public class DataParser {
 
@@ -23,6 +25,7 @@ public class DataParser {
         for (int i = 0; i < dishesResponse.length(); i++) {
             JSONObject dish = dishesResponse.getJSONObject(i);
             Log.e(TAG, "Dish: " + dish.toString());
+            String id = dish.getString("_id");
             String name = dish.getString("name");
             String restaurantName = dish.getString("restaurant");
             JSONArray foodTags = dish.getJSONArray("foodTags");
@@ -33,7 +36,7 @@ public class DataParser {
             String address = dish.getString("address");
             double distanceToUser = dish.getDouble("distanceToUser");
             Date uploadDate = parseDate(dish.getString("uploadDate"));
-            dishes.add(new Dish(name, restaurantName, foodTags, nutritionTags, likes, rating,
+            dishes.add(new Dish(id, name, restaurantName, foodTags, nutritionTags, likes, rating,
                     sugarRating, address, distanceToUser, uploadDate));
         }
         return dishes;
@@ -47,5 +50,16 @@ public class DataParser {
             Log.e(TAG, "Error while parsing date: " + e.getMessage());
             return null;
         }
+    }
+
+    public User parseUser(JSONObject userResponse) throws JSONException {
+        String name = userResponse.getString("name");
+        String userName = userResponse.getString("userName");
+        JSONArray favDishes = userResponse.getJSONArray("favoriteDishes");
+        HashSet<String> favDishesSet = new HashSet<>();
+        for (int i = 0; i < favDishes.length(); i++) {
+            favDishesSet.add(favDishes.getString(i));
+        }
+        return User.getInstance(name, userName, favDishesSet, null);
     }
 }

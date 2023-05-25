@@ -43,7 +43,7 @@
 
     <TextView
         android:id="@+id/dish_name_text_view"
-        android:layout_width="wrap_content"
+        android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
         android:layout_marginTop="16dp"
@@ -55,7 +55,7 @@
 
     <TextView
         android:id="@+id/restaurant_name_text_view"
-        android:layout_width="wrap_content"
+        android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
         android:layout_marginTop="5dp"

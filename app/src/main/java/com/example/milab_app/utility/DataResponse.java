@@ -1,6 +1,7 @@
 package com.example.milab_app.utility;
 
 import com.example.milab_app.objects.Dish;
+import com.example.milab_app.objects.User;
 
 import java.util.ArrayList;
 
@@ -15,14 +16,13 @@ public class DataResponse {
         return isError;
     }
 
-    public static class DishesResponse extends DataResponse {
+    public static class HomeResponse extends DataResponse {
         private final ArrayList<Dish> recommendedDishes;
         private final ArrayList<Dish> topRatedDishes;
         private final ArrayList<Dish> newestDishes;
 
-        public DishesResponse(boolean isError,
-                              ArrayList<Dish> recommendedDishes, ArrayList<Dish> topRatedDishes ,
-                              ArrayList<Dish> newestDishes) {
+        public HomeResponse(boolean isError, ArrayList<Dish> recommendedDishes,
+                            ArrayList<Dish> topRatedDishes , ArrayList<Dish> newestDishes) {
             super(isError);
             this.recommendedDishes = recommendedDishes;
             this.topRatedDishes = topRatedDishes;
@@ -52,6 +52,19 @@ public class DataResponse {
 
         public ArrayList<Dish> getSearchResults() {
             return searchResults;
+        }
+    }
+
+    public static class UserResponse extends DataResponse {
+        private final User user;
+
+        public UserResponse(boolean isError, User user) {
+            super(isError);
+            this.user = user;
+        }
+
+        public User getUser() {
+            return user;
         }
     }
 }

@@ -5,8 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal"
-    android:layout_margin="10dp">
+    android:orientation="horizontal">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -20,7 +19,7 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             android:layout_gravity="center"
-            android:layout_marginBottom="30dp"
+            android:layout_marginBottom="40dp"
             app:srcCompat="@drawable/sugar_friendly_logo"
             tools:ignore="ContentDescription" />
 
@@ -49,7 +48,6 @@
             android:layout_height="wrap_content"
             android:text="@string/homePagePromptQuestion"
             android:layout_gravity="center"
-            android:layout_marginBottom="20dp"
             android:textSize="25sp"
             android:textColor="@android:color/black"
             android:textStyle="bold"/>
@@ -58,7 +56,7 @@
             android:id="@+id/seekBarContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
+            android:layout_marginBottom="5dp"
             android:orientation="horizontal"
             android:layout_gravity="center"
             android:gravity="center">
@@ -111,18 +109,22 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginBottom="10dp"
+            android:paddingVertical="10dp"
             android:text="@string/lets_find_you_a_dish"
+            android:textColor="@color/white"
             android:textSize="20sp"
             android:textAllCaps="false"
-            app:backgroundTint="#FFFFFF"
+            app:backgroundTint="#009876"
             app:strokeColor="@color/black"
             app:strokeWidth="1dp"
+            app:cornerRadius="10dp"
             tools:ignore="SpeakableTextPresentCheck" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/lets_share_a_new_dish"
             android:layout_width="240dp"
             android:layout_height="wrap_content"
+            android:paddingVertical="10dp"
             android:layout_gravity="center"
             android:text="@string/let_s_share_a_new_dish"
             android:textSize="20sp"
@@ -130,6 +132,7 @@
             app:backgroundTint="#FFFFFF"
             app:strokeColor="@color/black"
             app:strokeWidth="1dp"
+            app:cornerRadius="10dp"
             tools:ignore="SpeakableTextPresentCheck" />
 
     </LinearLayout>

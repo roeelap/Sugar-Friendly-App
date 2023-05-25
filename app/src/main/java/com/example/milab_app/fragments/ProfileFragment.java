@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.milab_app.MainActivity;
 import com.example.milab_app.objects.Dish;
 import com.example.milab_app.utility.DishRecyclerViewAdapter;
 import com.example.milab_app.R;
@@ -27,8 +28,7 @@ public class ProfileFragment extends Fragment {
     private final ArrayList<Dish> dishes = new ArrayList<>();
     public ProfileFragment() {
         // TODO: get user from login activity
-        // User user = getIntent().getParcelableExtra("user");
-        user = User.getInstance("Roee", "roee", null, null, null);
+        user = ((MainActivity) requireActivity()).getUser();
         // TODO: get dishes from database
         dishes.add(new Dish("Dish 1", "Restaurant 1"));
         dishes.add(new Dish("Dish 2", "Restaurant 2"));

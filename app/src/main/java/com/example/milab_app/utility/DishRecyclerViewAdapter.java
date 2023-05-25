@@ -22,6 +22,7 @@ import com.example.milab_app.R;
 import com.google.android.material.button.MaterialButton;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 public class DishRecyclerViewAdapter extends RecyclerView.Adapter<DishRecyclerViewAdapter.ViewHolder> {
     private static final String TAG = "DishRecyclerViewAdapter";
@@ -58,11 +59,24 @@ public class DishRecyclerViewAdapter extends RecyclerView.Adapter<DishRecyclerVi
             ((MainActivity) context).showDishDetailsFragment(dish, "home");
         });
 
+        holder.toggleLikeButton(context, ((MainActivity) context).getFavDishes().contains(dish.getId()));
         holder.likeButton.setOnClickListener(v -> {
             Log.d(TAG, "onClick: " + holder.dishName.getText());
-            dish.setIsLiked(!dish.getIsLiked());
-            holder.toggleLikeButton(context, dish.getIsLiked());
-            // TODO: add dish to user's favorites
+            HashSet<String> favDishes = ((MainActivity) context).getFavDishes();
+            boolean isLikedAlready = favDishes.contains(dish.getId());
+            holder.toggleLikeButton(context, !isLikedAlready);
+            ((MainActivity) context).toggleDishLikability(dish.getId(), new MainActivity.Callback() {
+                @Override
+                public void onSuccess() {
+                    Log.d(TAG, "onSuccess: " + holder.dishName.getText());
+                }
+
+                @Override
+                public void onError(String message) {
+                    Log.d(TAG, "onError: " + holder.dishName.getText());
+                    holder.toggleLikeButton(context, isLikedAlready); // revert the button to its previous state
+                }
+            });
         });
     }
 

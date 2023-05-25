@@ -25,6 +25,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.material.slider.Slider;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class HomeFragment extends Fragment {
 
@@ -35,6 +36,10 @@ public class HomeFragment extends Fragment {
     private ArrayList<Dish> newestDishes;
 
     private LatLng userLatLng;
+
+    RecyclerView recommendationsRecyclerView;
+    RecyclerView topRatedRecyclerView;
+    RecyclerView newestRecyclerView;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -54,15 +59,16 @@ public class HomeFragment extends Fragment {
         TextView greeting = rootView.findViewById(R.id.greetingText);
         greeting.setText(String.format("Hello %s!", user.getName()));
 
+        recommendationsRecyclerView = rootView.findViewById(R.id.recommendations);
+        topRatedRecyclerView = rootView.findViewById(R.id.topRated);
+        newestRecyclerView = rootView.findViewById(R.id.newest);
+
         // setup recycler views
         if (recommendedDishes == null || topRatedDishes == null || newestDishes == null) {
             fetchDishes(rootView);
         } else {
             initHomePageLayout(rootView);
         }
-
-        Button sugarLevelPopupButton = rootView.findViewById(R.id.sugarLevelPopupButton);
-        sugarLevelPopupButton.setOnClickListener(v -> toggleSugarLevelPopUp(rootView));
 
         return rootView;
     }
@@ -95,20 +101,22 @@ public class HomeFragment extends Fragment {
         Log.d(TAG, "initDishRecyclerViews");
 
         // init recommendations recycler view
-        final RecyclerView recommendations = rootView.findViewById(R.id.recommendations);
-        initRecyclerView(recommendations, recommendedDishes);
+        initRecyclerView(recommendationsRecyclerView, recommendedDishes);
         rootView.findViewById(R.id.recommendationsLabel).setVisibility(View.VISIBLE);
 
         // init top rated recycler view
-        final RecyclerView topRated = rootView.findViewById(R.id.topRated);
-        initRecyclerView(topRated, topRatedDishes);
+        initRecyclerView(topRatedRecyclerView, topRatedDishes);
         rootView.findViewById(R.id.topRatedLabel).setVisibility(View.VISIBLE);
 
         // init newest recycler view
-        final RecyclerView newest = rootView.findViewById(R.id.newest);
-        initRecyclerView(newest, newestDishes);
+        initRecyclerView(newestRecyclerView, newestDishes);
         rootView.findViewById(R.id.newestLabel).setVisibility(View.VISIBLE);
 
+        // init sugar level popup
+        Button sugarLevelPopupButton = rootView.findViewById(R.id.sugarLevelPopupButton);
+        sugarLevelPopupButton.setOnClickListener(v -> toggleSugarLevelPopUp(rootView));
+
+        // init sugar level slider
         initUpSeekBar(rootView);
     }
 
@@ -129,6 +137,24 @@ public class HomeFragment extends Fragment {
         }
         DishRecyclerViewAdapter adapter = new DishRecyclerViewAdapter(getContext(), filteredDishes);
         recyclerView.setAdapter(adapter);
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    public void refreshRecyclerViews() {
+        Objects.requireNonNull(recommendationsRecyclerView.getAdapter()).notifyDataSetChanged();
+        Objects.requireNonNull(topRatedRecyclerView.getAdapter()).notifyDataSetChanged();
+        Objects.requireNonNull(newestRecyclerView.getAdapter()).notifyDataSetChanged();
+    }
+
+    public void toggleSugarLevelPopUp(View rootView) {
+        View sugarLevelPopUp = rootView.findViewById(R.id.sugarLevelPopup);
+        if (sugarLevelPopUp.getVisibility() == View.VISIBLE) {
+            sugarLevelPopUp.setVisibility(View.GONE);
+            return;
+        }
+        sugarLevelPopUp.setVisibility(View.VISIBLE);
+        Button closeButton = sugarLevelPopUp.findViewById(R.id.popupClose);
+        closeButton.setOnClickListener(v -> sugarLevelPopUp.setVisibility(View.GONE));
     }
 
     @SuppressLint("SetTextI18n")
@@ -158,16 +184,4 @@ public class HomeFragment extends Fragment {
             updateRecyclerViewToSugarLevel(newestDishes, sugarLevel, rootView.findViewById(R.id.newest));
         });
     }
-
-    public void toggleSugarLevelPopUp(View rootView) {
-        View sugarLevelPopUp = rootView.findViewById(R.id.sugarLevelPopup);
-        if (sugarLevelPopUp.getVisibility() == View.VISIBLE) {
-            sugarLevelPopUp.setVisibility(View.GONE);
-            return;
-        }
-        sugarLevelPopUp.setVisibility(View.VISIBLE);
-        Button closeButton = sugarLevelPopUp.findViewById(R.id.popupClose);
-        closeButton.setOnClickListener(v -> sugarLevelPopUp.setVisibility(View.GONE));
-    }
-
 }

@@ -12,16 +12,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.PopupWindow;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.example.milab_app.fragments.CameraFragment;
 import com.example.milab_app.fragments.DishDetailsFragment;
 import com.example.milab_app.fragments.HomeFragment;
-import com.example.milab_app.fragments.ProfileFragment;
 import com.example.milab_app.fragments.SearchFragment;
 import com.example.milab_app.objects.Dish;
 import com.example.milab_app.objects.User;
+import com.example.milab_app.utility.DataFetcher;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+
+import java.util.HashSet;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -32,13 +35,13 @@ public class MainActivity extends AppCompatActivity {
     HomeFragment homeFragment = new HomeFragment();
     SearchFragment searchFragment = new SearchFragment();
     CameraFragment cameraFragment = new CameraFragment();
-    ProfileFragment profileFragment = new ProfileFragment();
+    // ProfileFragment profileFragment = new ProfileFragment();
 
     // user
-    private final User user = User.getInstance("Roee", "roee", null, null, null);
-
+    private User user;
     private boolean locationPermissionGranted;
     private LatLng currentDeviceLocation;
+    private final String defaultUserName = "roee";
 
     private ProgressBar progressBar;
 
@@ -55,30 +58,59 @@ public class MainActivity extends AppCompatActivity {
         Log.e(TAG, "locationPermissionGranted: " + locationPermissionGranted);
         Log.e(TAG, "currentDeviceLocation: " + currentDeviceLocation);
 
-        // initialize bottom navigation
-        initBottomNavigation();
-
-        // check if we need to open a specific fragment
         String fragment = getIntent().getStringExtra("fragment");
-        if (fragment != null) {
-            switch (fragment) {
-                case "home":
-                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, homeFragment).commit();
-                    break;
-                case "camera":
-                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, cameraFragment).commit();
-                    bottomNavigationView.setSelectedItemId(R.id.navigation_camera);
-                    break;
-            }
+
+        // fetch user if this is the first time main activity is opened
+        if (user == null) {
+            fetchUser(new Callback() {
+                @Override
+                public void onSuccess() {
+                    // initialize bottom navigation and open fragment
+                    initBottomNavigation();
+                    showFragment(fragment);
+                }
+
+                @Override
+                public void onError(String message) {
+                    Log.e(TAG, message);
+                    toast(message);
+                }
+            });
         } else {
-            // set home fragment as default
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, homeFragment).commit();
+            // initialize bottom navigation and open fragment
+            initBottomNavigation();
+            showFragment(fragment);
         }
     }
 
     public User getUser() { return user; }
-
+    public HashSet<String> getFavDishes() { return user.getFavDishes(); }
     public LatLng getCurrentDeviceLocation() { return currentDeviceLocation; }
+
+    private void toast(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    }
+
+    private void fetchUser(Callback callback) {
+        Log.d(TAG, "fetchDishes");
+        // show progress bar
+        showProgressBar();
+
+        final DataFetcher fetcher = DataFetcher.getInstance(this);
+        fetcher.fetchUser(defaultUserName, response -> {
+            // hide progress bar
+            hideProgressBar();
+            if (response.isError()) {
+                callback.onError("Error fetching user");
+                return;
+            }
+
+            // update user
+            user = response.getUser();
+            Log.d(TAG, "Fetched user successfully");
+            callback.onSuccess();
+        });
+    }
 
     /**
      * Initialize bottom navigation buttons
@@ -102,7 +134,6 @@ public class MainActivity extends AppCompatActivity {
             return false;
         });
     }
-
 
     /**
      * Show a restaurant on map. Will open map fragment and focus on the restaurant.
@@ -136,19 +167,48 @@ public class MainActivity extends AppCompatActivity {
         popupWindow.showAtLocation(container, Gravity.BOTTOM, 0, 0);
     }
 
-    public void showDishDetailsFragment(Dish dish, String previousFragmentName) {
-        DishDetailsFragment dishDetailsFragment = new DishDetailsFragment(dish, previousFragmentName);
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, dishDetailsFragment).commit();
-    }
-
-    public void showFragment(String fragmentName) {
-        switch (fragmentName) {
+    public void showFragment(String FragmentName) {
+        if (FragmentName == null) {
+            Log.e(TAG, "openFragment: FragmentName is null, opening home fragment");
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, homeFragment).commit();
+            return;
+        }
+        switch (FragmentName) {
             case "home":
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, homeFragment).commit();
                 break;
             case "search":
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, searchFragment).commit();
                 break;
+            case "camera":
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, cameraFragment).commit();
+                break;
         }
+    }
+
+    public void showDishDetailsFragment(Dish dish, String previousFragmentName) {
+        DishDetailsFragment dishDetailsFragment = new DishDetailsFragment(dish, previousFragmentName);
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, dishDetailsFragment).commit();
+    }
+
+    public void toggleDishLikability(String dishId, Callback callback) {
+        user.toggleDishLikability(dishId);
+        Log.e(TAG, "toggleDishLikability: " + user.getFavDishes());
+        final DataFetcher fetcher = DataFetcher.getInstance(this);
+        fetcher.updateUser(user, response -> {
+            if (response.isError()) {
+                toast("Server Error");
+                user.toggleDishLikability(dishId); // revert changes if server error
+                callback.onError("Error liking dish");
+            } else {
+                homeFragment.refreshRecyclerViews();
+                callback.onSuccess();
+            }
+        });
+    }
+
+    public interface Callback {
+        void onSuccess();
+        void onError(String message);
     }
 }
