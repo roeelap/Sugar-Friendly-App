@@ -50,8 +50,9 @@
     <string name="star">star</string>
     <string name="spoon">spoon</string>
     <string name="your_sugar_now">Your sugar now</string>
-    <string name="dish_name">dish name</string>
-    <string name="restaurant_name">restaurant name</string>
+    <string name="dish_name">Dish Name</string>
+    <string name="restaurant_name">Restaurant Name</string>
+    <string name="address">Address</string>
     <string name="share">Share restaurant</string>
     <string name="map">Map</string>
     <string name="restaurant_page">Restaurant page</string>
@@ -59,4 +60,7 @@
     <string name="excellent">Excellent</string>
     <string name="okay">Okay</string>
     <string name="good">Good</string>
+    <string name="share_your_dish_with_us">Share your dish with us!</string>
+    <string name="share_dish">Share Dish</string>
+    <string name="tags">Tags</string>
 </resources>

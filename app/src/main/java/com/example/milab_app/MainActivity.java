@@ -1,17 +1,22 @@
 package com.example.milab_app;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.PopupWindow;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.milab_app.fragments.CameraFragment;
@@ -21,44 +26,62 @@ import com.example.milab_app.fragments.SearchFragment;
 import com.example.milab_app.objects.Dish;
 import com.example.milab_app.objects.User;
 import com.example.milab_app.utility.DataFetcher;
+import com.example.milab_app.utility.LogmealAPI;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.HashSet;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements LogmealAPI.LogMealCallback {
 
     private static final String TAG = "MainActivity";
+
+    private static final int REQUEST_CAMERA_PERMISSION = 200;
 
     // fragments
     BottomNavigationView bottomNavigationView;
     HomeFragment homeFragment = new HomeFragment();
     SearchFragment searchFragment = new SearchFragment();
     CameraFragment cameraFragment = new CameraFragment();
-    // ProfileFragment profileFragment = new ProfileFragment();
 
     // user
     private User user;
-    private boolean locationPermissionGranted;
     private LatLng currentDeviceLocation;
-    private final String defaultUserName = "roee";
 
-    private ProgressBar progressBar;
+    // camera
+    private ActivityResultLauncher<Intent> cameraLauncher;
+    private Bitmap capturedImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        progressBar = findViewById(R.id.progress_bar);
-
         // set up location
-        locationPermissionGranted = getIntent().getBooleanExtra("locationPermissionGranted", false);
         currentDeviceLocation = getIntent().getParcelableExtra("currentDeviceLocation");
-        Log.e(TAG, "locationPermissionGranted: " + locationPermissionGranted);
         Log.e(TAG, "currentDeviceLocation: " + currentDeviceLocation);
 
         String fragment = getIntent().getStringExtra("fragment");
+
+        // set up camera launcher for taking pictures
+        cameraLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == Activity.RESULT_OK) {
+                        Intent data = result.getData();
+                        if (data != null) {
+                            capturedImage = (Bitmap) data.getExtras().get("data");
+                            if (capturedImage == null) {
+                                Log.e(TAG, "capturedImage is null");
+                                return;
+                            }
+                            //LogmealAPI.sendImage(capturedImage, this);
+                            onLogMealSuccess("test");
+                        }
+                    } else {
+                        Log.e(TAG, "camera result code: " + result.getResultCode());
+                    }
+                });
 
         // fetch user if this is the first time main activity is opened
         if (user == null) {
@@ -86,17 +109,23 @@ public class MainActivity extends AppCompatActivity {
     public User getUser() { return user; }
     public HashSet<String> getFavDishes() { return user.getFavDishes(); }
     public LatLng getCurrentDeviceLocation() { return currentDeviceLocation; }
-
+    public void showProgressBar() { findViewById(R.id.progress_bar).setVisibility(View.VISIBLE); }
+    public void hideProgressBar() { findViewById(R.id.progress_bar).setVisibility(View.GONE); }
     private void toast(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
+    /**
+     * Fetch user from server and update user object.
+     * @param callback callback to be called when fetch is done
+     */
     private void fetchUser(Callback callback) {
         Log.d(TAG, "fetchDishes");
         // show progress bar
         showProgressBar();
 
         final DataFetcher fetcher = DataFetcher.getInstance(this);
+        String defaultUserName = "roee";
         fetcher.fetchUser(defaultUserName, response -> {
             // hide progress bar
             hideProgressBar();
@@ -128,15 +157,22 @@ public class MainActivity extends AppCompatActivity {
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, searchFragment).commit();
                     return true;
                 case R.id.navigation_camera:
-                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, cameraFragment).commit();
-                    return true;
+                    // check if camera permission is granted
+                    if (ContextCompat.checkSelfPermission(MainActivity.this,
+                            android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                        ActivityCompat.requestPermissions(MainActivity.this,
+                                new String[]{android.Manifest.permission.CAMERA}, REQUEST_CAMERA_PERMISSION);
+                    } else {
+                        openCamera();
+                    }
             }
             return false;
         });
     }
 
     /**
-     * Show a restaurant on map. Will open map fragment and focus on the restaurant.
+     * Show a restaurant in google maps.
+     * @param address restaurant address
      * @param restaurantName restaurant name
      */
     public void showAddressInGoogleMaps(String address, String restaurantName) {
@@ -146,25 +182,6 @@ public class MainActivity extends AppCompatActivity {
         Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
         mapIntent.setPackage("com.google.android.apps.maps");
         startActivity(mapIntent);
-    }
-
-    public void showProgressBar() {
-        progressBar.setVisibility(View.VISIBLE);
-    }
-
-    public void hideProgressBar() {
-        progressBar.setVisibility(View.GONE);
-    }
-
-    public void createAddDishPopup() {
-        @SuppressLint("InflateParams") View popupView = getLayoutInflater().inflate(R.layout.add_dish_popup, null);
-        PopupWindow popupWindow = new PopupWindow(popupView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        popupWindow.setAnimationStyle(R.style.add_dish_popup_animation);
-        popupWindow.setFocusable(true);
-        popupWindow.setOutsideTouchable(true);
-        popupWindow.update();
-        View container = findViewById(R.id.main_layout_container);
-        popupWindow.showAtLocation(container, Gravity.BOTTOM, 0, 0);
     }
 
     public void showFragment(String FragmentName) {
@@ -205,6 +222,41 @@ public class MainActivity extends AppCompatActivity {
                 callback.onSuccess();
             }
         });
+    }
+
+    public void openCamera() {
+        Log.e(TAG, "openCamera");
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            cameraLauncher.launch(takePictureIntent);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == REQUEST_CAMERA_PERMISSION) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                openCamera();
+            } else {
+                Toast.makeText(this, "Camera permission denied", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    @Override
+    public void onLogMealSuccess(String response) {
+        // open camera fragment with the response
+        Log.e(TAG, "onLogMealSuccess: " + response);
+        cameraFragment = new CameraFragment(capturedImage, response);
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, cameraFragment).commit();
+    }
+
+    @Override
+    public void onLogMealError(String message) {
+        Log.e(TAG, "onLogMealError: " + message);
+        toast(message);
     }
 
     public interface Callback {

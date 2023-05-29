@@ -23,7 +23,7 @@ public class LogmealAPI {
     private static final String LOGMEAL_API_URL = "https://api.logmeal.es/v2/image/segmentation/complete";
     private static final String LOGMEAL_API_KEY = "976f1efbe142ed81fb129cf9a680f17b32f81df9";
 
-    public static void sendImage(Bitmap image, final LogmealAPI.Callback callback) {
+    public static void sendImage(Bitmap image, final LogmealAPI.LogMealCallback callback) {
         // Convert Bitmap to byte array
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         image.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
@@ -49,7 +49,7 @@ public class LogmealAPI {
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
                 // Handle API call failure
                 e.printStackTrace();
-                callback.onError(e.getMessage());
+                callback.onLogMealError(e.getMessage());
             }
 
             @Override
@@ -59,18 +59,18 @@ public class LogmealAPI {
                     String responseString = response.body().string();
                     // Process the response data as needed
                     // responseData contains the data received from the Logmeal API
-                    callback.onSuccess(responseString);
+                    callback.onLogMealSuccess(responseString);
                 } else {
                     // Handle non-successful response
-                    callback.onError(response.message());
+                    callback.onLogMealError(response.message());
                 }
             }
         });
         Log.e(TAG, "Sent image");
     }
 
-    public interface Callback {
-        void onSuccess(String response);
-        void onError(String message);
+    public interface LogMealCallback {
+        void onLogMealSuccess(String response);
+        void onLogMealError(String message);
     }
 }
