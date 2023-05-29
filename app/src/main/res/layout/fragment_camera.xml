@@ -99,6 +99,46 @@
                 app:justifyContent="center"
                 app:showDivider="beginning|middle|end" />
 
+            <TextView
+                android:id="@+id/predicted_food_items_textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:text="@string/predicted_food_items"
+                android:textStyle="bold"
+                android:textSize="20sp" />
+
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/chipGroup_predicted_food_items"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginBottom="10dp"
+                app:alignContent="space_around"
+                app:alignItems="stretch"
+                app:flexWrap="wrap"
+                app:justifyContent="center"
+                app:showDivider="beginning|middle|end" />
+
+            <TextView
+                android:id="@+id/estimated_nutritional_values_textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:text="@string/estimated_nutritional_values"
+                android:textStyle="bold"
+                android:textSize="20sp" />
+
+            <TableLayout
+                android:id="@+id/nutritional_values_table"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="100dp"
+                android:stretchColumns="*">
+            </TableLayout>
+
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

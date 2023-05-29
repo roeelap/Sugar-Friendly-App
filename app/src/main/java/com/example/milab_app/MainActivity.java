@@ -75,8 +75,9 @@ public class MainActivity extends AppCompatActivity implements LogmealAPI.LogMea
                                 Log.e(TAG, "capturedImage is null");
                                 return;
                             }
-                            //LogmealAPI.sendImage(capturedImage, this);
-                            onLogMealSuccess("test");
+                            // send image to logmeal api
+                            LogmealAPI logmealAPI = new LogmealAPI();
+                            logmealAPI.sendImage(capturedImage, this);
                         }
                     } else {
                         Log.e(TAG, "camera result code: " + result.getResultCode());
@@ -246,7 +247,7 @@ public class MainActivity extends AppCompatActivity implements LogmealAPI.LogMea
     }
 
     @Override
-    public void onLogMealSuccess(String response) {
+    public void onLogMealSuccess(LogmealAPI.LogmealResponse response) {
         // open camera fragment with the response
         Log.e(TAG, "onLogMealSuccess: " + response);
         cameraFragment = new CameraFragment(capturedImage, response);
@@ -256,7 +257,6 @@ public class MainActivity extends AppCompatActivity implements LogmealAPI.LogMea
     @Override
     public void onLogMealError(String message) {
         Log.e(TAG, "onLogMealError: " + message);
-        toast(message);
     }
 
     public interface Callback {

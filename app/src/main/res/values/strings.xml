@@ -63,4 +63,6 @@
     <string name="share_your_dish_with_us">Share your dish with us!</string>
     <string name="share_dish">Share Dish</string>
     <string name="tags">Tags</string>
+    <string name="predicted_food_items">Predicted Food Items</string>
+    <string name="estimated_nutritional_values">Estimated Nutritional Values</string>
 </resources>
