@@ -112,7 +112,7 @@ public class MainActivity extends AppCompatActivity implements LogmealAPI.LogMea
     public LatLng getCurrentDeviceLocation() { return currentDeviceLocation; }
     public void showProgressBar() { findViewById(R.id.progress_bar).setVisibility(View.VISIBLE); }
     public void hideProgressBar() { findViewById(R.id.progress_bar).setVisibility(View.GONE); }
-    private void toast(String message) {
+    public void toast(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 

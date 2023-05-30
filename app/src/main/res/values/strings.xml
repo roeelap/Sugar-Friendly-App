@@ -65,4 +65,6 @@
     <string name="tags">Tags</string>
     <string name="predicted_food_items">Predicted Food Items</string>
     <string name="estimated_nutritional_values">Estimated Nutritional Values</string>
+    <string name="sugar_level">Sugar Level</string>
+    <string name="low">Low</string>
 </resources>

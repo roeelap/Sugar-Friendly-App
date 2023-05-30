@@ -49,7 +49,7 @@ public class DishRecyclerViewAdapter extends RecyclerView.Adapter<DishRecyclerVi
         Dish dish = dishes.get(position);
         holder.dishName.setText(dish.getName());
         holder.restaurant.setText(dish.getRestaurantName());
-        holder.dishImage.setImageResource(R.drawable.sushi);
+        holder.dishImage.setImageBitmap(dish.getImage());
         holder.rating.setText(String.valueOf(dish.getRating()));
         holder.sugarRating.setText(String.valueOf(dish.getSugarRating()));
         holder.distanceToDish.setText(format("%.1f km", dish.getDistanceToUser()));

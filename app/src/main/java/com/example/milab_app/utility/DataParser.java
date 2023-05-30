@@ -1,6 +1,9 @@
 package com.example.milab_app.utility;
 
 import android.annotation.SuppressLint;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Base64;
 import android.util.Log;
 
 import com.example.milab_app.objects.Dish;
@@ -36,8 +39,16 @@ public class DataParser {
             String address = dish.getString("address");
             double distanceToUser = dish.getDouble("distanceToUser");
             Date uploadDate = parseDate(dish.getString("uploadDate"));
+            Bitmap image = null;
+            if (dish.has("dishImage")) {
+                image = decodeImage(dish.getString("dishImage"));
+            }
+            JSONObject nutritionalValues = null;
+            if (dish.has("nutritionalValues")) {
+                nutritionalValues = dish.getJSONObject("nutritionalValues");
+            }
             dishes.add(new Dish(id, name, restaurantName, foodTags, nutritionTags, likes, rating,
-                    sugarRating, address, distanceToUser, uploadDate));
+                    sugarRating, address, distanceToUser, uploadDate, nutritionalValues, image));
         }
         return dishes;
     }
@@ -61,5 +72,10 @@ public class DataParser {
             favDishesSet.add(favDishes.getString(i));
         }
         return User.getInstance(name, userName, favDishesSet, null);
+    }
+
+    public Bitmap decodeImage(String encodedImage) {
+        byte[] imageBytes = Base64.decode(encodedImage, Base64.DEFAULT);
+        return BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
     }
 }

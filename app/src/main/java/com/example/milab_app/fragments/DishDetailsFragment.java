@@ -2,6 +2,7 @@ package com.example.milab_app.fragments;
 
 import android.content.Context;
 import android.content.res.ColorStateList;
+import android.media.Image;
 import android.os.Bundle;
 
 import androidx.core.content.ContextCompat;
@@ -12,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.milab_app.MainActivity;
@@ -41,7 +43,7 @@ public class DishDetailsFragment extends Fragment {
 
         MainActivity mainActivity = (MainActivity) requireActivity();
         Context context = getContext();
-        setUpText(rootView, dish);
+        setUpUI(rootView, dish);
 
         Button mapButton = rootView.findViewById(R.id.map_button);
         mapButton.setOnClickListener(v -> mainActivity.showAddressInGoogleMaps(dish.getAddress(), dish.getRestaurantName()));
@@ -73,19 +75,21 @@ public class DishDetailsFragment extends Fragment {
         return rootView;
     }
 
-    private void setUpText(View rootView, Dish dish) {
+    private void setUpUI(View rootView, Dish dish) {
         TextView dishName = rootView.findViewById(R.id.dish_name_text_view);
         TextView restaurantName = rootView.findViewById(R.id.restaurant_name_text_view);
         TextView rating = rootView.findViewById(R.id.rating);
         TextView sugarRating = rootView.findViewById(R.id.sugarRating);
         TextView ratingLiteral = rootView.findViewById(R.id.ratingLiteral);
         TextView sugarRatingLiteral = rootView.findViewById(R.id.sugarRatingLiteral);
+        ImageView dishImage = rootView.findViewById(R.id.dish_image_view);
 
         dishName.setText(dish.getName());
         restaurantName.setText(dish.getRestaurantName());
         rating.setText(String.valueOf(dish.getRating()));
         setUpRatingLiteral(rootView, ratingLiteral);
         sugarRating.setText(String.valueOf(dish.getSugarRating()));
+        dishImage.setImageBitmap(dish.getImage());
         setUpSugarRatingLiteral(rootView, sugarRatingLiteral);
     }
 

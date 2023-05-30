@@ -20,9 +20,9 @@
                 android:id="@+id/captured_image"
                 android:layout_width="match_parent"
                 android:layout_height="260dp"
-                android:scaleType="centerCrop"
                 android:adjustViewBounds="true"
                 android:contentDescription="@string/dish_image_description"
+                android:scaleType="centerCrop"
                 android:src="@drawable/sushi" />
 
             <TextView
@@ -37,14 +37,15 @@
                 tools:ignore="VisualLintBounds" />
 
             <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:layout_marginHorizontal="20dp"
-                android:layout_marginBottom="10dp"
                 android:layout_gravity="center"
-                android:hint="@string/dish_name"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="10dp"
+                android:hint="@string/dish_name">
+
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/dish_name_textInput"
                     android:layout_width="match_parent"
@@ -54,13 +55,14 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:layout_marginHorizontal="20dp"
                 android:layout_marginBottom="10dp"
-                android:layout_gravity="center"
-                android:hint="@string/restaurant_name"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+                android:hint="@string/restaurant_name">
+
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/restaurant_name_textInput"
                     android:layout_width="match_parent"
@@ -71,13 +73,13 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/tags_textInputLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:layout_marginHorizontal="20dp"
                 android:layout_marginBottom="10dp"
-                android:layout_gravity="center"
-                android:hint="@string/tags"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+                android:hint="@string/tags">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/tags_textInputEditText"
@@ -105,8 +107,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="20dp"
                 android:text="@string/predicted_food_items"
-                android:textStyle="bold"
-                android:textSize="20sp" />
+                android:textSize="20sp"
+                android:textStyle="bold" />
 
             <com.google.android.material.chip.ChipGroup
                 android:id="@+id/chipGroup_predicted_food_items"
@@ -126,8 +128,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="20dp"
                 android:text="@string/estimated_nutritional_values"
-                android:textStyle="bold"
-                android:textSize="20sp" />
+                android:textSize="20sp"
+                android:textStyle="bold" />
 
             <TableLayout
                 android:id="@+id/nutritional_values_table"
@@ -135,9 +137,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="100dp"
-                android:stretchColumns="*">
-            </TableLayout>
-
+                android:stretchColumns="*" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -160,84 +160,40 @@
                     android:src="@drawable/full_spoon_64" />
 
                 <TextView
-                    android:id="@+id/sugarRating"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="10dp"
-                    android:text="@string/sugar_rating"
+                    android:text="@string/sugar_level"
                     android:textSize="16sp" />
 
                 <TextView
-                    android:id="@+id/sugarRatingLiteral"
+                    android:id="@+id/sugarLevel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="70dp"
-                    android:background="@drawable/rounded_corners_dark_green"
                     android:paddingHorizontal="10dp"
-                    android:text="@string/excellent"
-                    android:textColor="@color/white"
-                    android:textSize="14sp"
+                    android:text="@string/low"
                     android:textStyle="bold"
-                    tools:ignore="TextContrastCheck,VisualLintBounds" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_marginStart="16dp">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginRight="10dp"
-                    android:adjustViewBounds="true"
-                    android:contentDescription="@string/star"
-                    android:maxWidth="20dp"
-                    android:maxHeight="20dp"
-                    android:scaleType="fitCenter"
-                    android:src="@drawable/baseline_star_24"
-                    app:tint="#F7B75B"
-                    tools:ignore="ImageContrastCheck" />
-
-                <TextView
-                    android:id="@+id/rating"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="10dp"
-                    android:text="@string/rating"
-                    android:textSize="16sp" />
-
-                <TextView
-                    android:id="@+id/ratingLiteral"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="70dp"
-                    android:background="@drawable/rounded_corners_dark_green"
-                    android:paddingHorizontal="10dp"
-                    android:text="@string/excellent"
-                    android:textColor="@color/white"
                     android:textSize="14sp"
-                    android:textStyle="bold"
-                    tools:ignore="TextContrastCheck,VisualLintBounds" />
+                    android:textColor="@color/white"
+                    android:background="@drawable/rounded_corners_dark_green" />
             </LinearLayout>
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/share_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/share_dish"
-                android:textSize="15sp"
-                android:textStyle="bold"
-                android:textColor="@color/white"
-                android:textAllCaps="false"
-                android:paddingVertical="12dp"
-                android:layout_marginVertical="40dp"
                 android:layout_gravity="center"
+                android:layout_marginVertical="40dp"
+                android:paddingVertical="12dp"
+                android:text="@string/share_dish"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:textStyle="bold"
                 app:backgroundTint="#009876"
-                app:strokeWidth="1dp"
-                app:cornerRadius="10dp" />
+                app:cornerRadius="10dp"
+                app:strokeWidth="1dp" />
 
         </LinearLayout>
 

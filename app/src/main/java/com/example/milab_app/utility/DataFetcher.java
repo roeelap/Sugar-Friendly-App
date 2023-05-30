@@ -30,6 +30,7 @@ public class DataFetcher {
     private final static String DISHES_REQUEST_URL = URL + "/home";
     private final static String SEARCH_REQUEST_URL = URL + "/search";
     private final static String UPDATE_USER_URL = URL + "/updateUser";
+    private final static String UPLOAD_DISH_URL = URL + "/uploadDish";
 
     private final DataParser parser = new DataParser();
 
@@ -193,6 +194,28 @@ public class DataFetcher {
         }
         Log.e(TAG, "Post body: " + postBody);
         JsonObjectRequest req = new JsonObjectRequest(Request.Method.POST, UPDATE_USER_URL, postBody,
+                response -> {
+                    Log.d(TAG, "Got response: " + response.toString());
+                    try {
+                        boolean isSuccessful = response.getBoolean("result");
+                        Log.e(TAG, "isSuccessful: " + isSuccessful);
+                        DataResponse res = new DataResponse(!isSuccessful);
+                        listener.onResponse(res);
+                    } catch (JSONException e) {
+                        Log.e(TAG, "Error while parsing response: " + e.getMessage());
+                        listener.onResponse(createDataErrorResponse());
+                    }
+                }, error -> {
+            Log.e(TAG, "Error while parsing response: " + error.getMessage());
+            listener.onResponse(createDataErrorResponse());
+        });
+
+        queue.add(req);
+    }
+
+    public void uploadDish(JSONObject dishPostBody, final DataResponseListener listener) {
+        Log.e(TAG, "Post body: " + dishPostBody);
+        JsonObjectRequest req = new JsonObjectRequest(Request.Method.POST, UPLOAD_DISH_URL, dishPostBody,
                 response -> {
                     Log.d(TAG, "Got response: " + response.toString());
                     try {

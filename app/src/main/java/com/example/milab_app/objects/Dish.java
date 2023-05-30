@@ -1,8 +1,12 @@
 package com.example.milab_app.objects;
 
+import android.graphics.Bitmap;
+
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.Date;
+import java.util.TreeMap;
 
 public class Dish {
 
@@ -17,10 +21,12 @@ public class Dish {
     protected String address;
     protected double distanceToUser;
     protected Date uploadDate;
-    protected boolean isLiked;
+    protected TreeMap<String, String> nutritionalValues;
+    protected Bitmap image;
 
     public Dish(String id, String name, String restaurantName, JSONArray foodTags, JSONArray nutritionTags,
-                int likes, double rating, double sugarRating, String address, double distanceToUser, Date uploadDate) {
+                int likes, double rating, double sugarRating, String address, double distanceToUser,
+                Date uploadDate, JSONObject nutritionalValues, Bitmap image) {
         this.id = id;
         this.name = name;
         this.restaurantName = restaurantName;
@@ -32,7 +38,8 @@ public class Dish {
         this.address = address;
         this.distanceToUser = distanceToUser;
         this.uploadDate = uploadDate;
-        this.isLiked = false;
+        this.nutritionalValues = new TreeMap<>();
+        this.image = image;
     }
 
     public Dish(String name, String restaurantName) {
@@ -47,7 +54,6 @@ public class Dish {
         this.address = null;
         this.distanceToUser = 0.0;
         this.uploadDate = new Date();
-        this.isLiked = false;
     }
 
     /* getters */
@@ -58,7 +64,7 @@ public class Dish {
     public double getSugarRating() { return sugarRating; }
     public String getAddress() { return address; }
     public double getDistanceToUser() { return distanceToUser; }
-    public boolean getIsLiked() { return isLiked; }
+    public Bitmap getImage() { return image; }
+    public TreeMap<String, String> getNutritionalValues() { return nutritionalValues; }
 
-    public void setIsLiked(boolean isLiked) { this.isLiked = isLiked; }
 }

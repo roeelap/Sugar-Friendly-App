@@ -133,6 +133,7 @@ public class LogmealAPI {
     public static class LogmealResponse {
         public HashSet<String> detectedDishes;
         public TreeMap<String, String> nutritionalValues;
+        public String sugarLevel;
 
         @SuppressLint("DefaultLocale")
         public LogmealResponse(String response) {
@@ -161,6 +162,10 @@ public class LogmealAPI {
 
                 JSONObject nutritionalInfo = jsonResponse.getJSONObject("nutritional_info");
 
+                JSONObject dailyIntakeReference = nutritionalInfo.getJSONObject("dailyIntakeReference");
+                JSONObject sugarDailyIntakeReference = dailyIntakeReference.getJSONObject("SUGAR");
+                sugarLevel = sugarDailyIntakeReference.getString("level");
+
                 nutritionalValues.put("Calories", String.format("%.2f", nutritionalInfo.getDouble("calories"))); // calories
 
                 JSONObject totalNutrients = nutritionalInfo.getJSONObject("totalNutrients");
@@ -169,6 +174,8 @@ public class LogmealAPI {
                 parseValue(totalNutrients.getJSONObject("FAT")); // fat
                 parseValue(totalNutrients.getJSONObject("PROCNT")); // protein
                 parseValue(totalNutrients.getJSONObject("SUGAR")); // sugar
+
+
             } catch (Exception e) {
                 Log.e(TAG, "Exception: " + e.getMessage());
             }
