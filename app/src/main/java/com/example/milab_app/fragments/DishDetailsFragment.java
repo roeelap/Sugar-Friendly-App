@@ -1,5 +1,6 @@
 package com.example.milab_app.fragments;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.media.Image;
@@ -14,6 +15,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.example.milab_app.MainActivity;
@@ -22,6 +25,7 @@ import com.example.milab_app.objects.Dish;
 import com.google.android.material.button.MaterialButton;
 
 import java.util.HashSet;
+import java.util.TreeMap;
 
 public class DishDetailsFragment extends Fragment {
 
@@ -91,6 +95,17 @@ public class DishDetailsFragment extends Fragment {
         sugarRating.setText(String.valueOf(dish.getSugarRating()));
         dishImage.setImageBitmap(dish.getImage());
         setUpSugarRatingLiteral(rootView, sugarRatingLiteral);
+
+        // update nutritional values table
+        TableLayout nutritionalValuesTable = rootView.findViewById(R.id.nutritional_values_table);
+        TreeMap<String, String> nutritionalValues = dish.getNutritionalValues();
+        Log.e(TAG, "nutritionalValues: " + nutritionalValues);
+        if (nutritionalValues != null) {
+            for (String key : nutritionalValues.keySet()) {
+                Log.e(TAG, "key: " + key + ", value: " + nutritionalValues.get(key));
+                addRowToTable(requireActivity(), nutritionalValuesTable, key, nutritionalValues.get(key));
+            }
+        }
     }
 
     private void setUpRatingLiteral(View rootView, TextView ratingLiteral) {
@@ -133,5 +148,29 @@ public class DishDetailsFragment extends Fragment {
             likeButton.setIcon(ContextCompat.getDrawable(context, R.drawable.baseline_favorite_border_24));
             likeButton.setIconTint(ColorStateList.valueOf(ContextCompat.getColor(context, R.color.black)));
         }
+    }
+
+    private void addRowToTable(Activity a, TableLayout table, String key, String value) {
+        TableRow row = new TableRow(a);
+        TableRow.LayoutParams rowParams = new TableRow.LayoutParams();
+        rowParams.height = TableRow.LayoutParams.WRAP_CONTENT;
+        rowParams.width = TableRow.LayoutParams.MATCH_PARENT;
+        rowParams.setMargins(0, 10, 0, 10);
+
+        TableRow.LayoutParams columnParams = new TableRow.LayoutParams();
+        // wrap-up content of the row
+        columnParams.height = TableRow.LayoutParams.WRAP_CONTENT;
+        columnParams.width = TableRow.LayoutParams.WRAP_CONTENT;
+
+        TextView keyTextView = new TextView(a);
+        TextView valueTextView = new TextView(a);
+        keyTextView.setText(key);
+        keyTextView.setTextSize(18);
+        valueTextView.setText(value);
+        valueTextView.setTextSize(18);
+
+        row.addView(keyTextView, columnParams);
+        row.addView(valueTextView, columnParams);
+        table.addView(row, rowParams);
     }
 }

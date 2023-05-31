@@ -6,6 +6,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.Date;
+import java.util.Iterator;
 import java.util.TreeMap;
 
 public class Dish {
@@ -26,7 +27,7 @@ public class Dish {
 
     public Dish(String id, String name, String restaurantName, JSONArray foodTags, JSONArray nutritionTags,
                 int likes, double rating, double sugarRating, String address, double distanceToUser,
-                Date uploadDate, JSONObject nutritionalValues, Bitmap image) {
+                Date uploadDate, JSONObject nutrition, Bitmap image) {
         this.id = id;
         this.name = name;
         this.restaurantName = restaurantName;
@@ -39,6 +40,19 @@ public class Dish {
         this.distanceToUser = distanceToUser;
         this.uploadDate = uploadDate;
         this.nutritionalValues = new TreeMap<>();
+        try {
+            if (nutrition != null) {
+                Iterator<String> keys = nutrition.keys();
+                while(keys.hasNext()) {
+                    String nutrient = (String)keys.next();
+                    String Value = nutrition.getString(nutrient);
+                    this.nutritionalValues.put(nutrient, Value);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         this.image = image;
     }
 

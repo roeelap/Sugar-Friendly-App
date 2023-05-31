@@ -47,6 +47,7 @@ public class DataParser {
             if (dish.has("nutritionalValues")) {
                 nutritionalValues = dish.getJSONObject("nutritionalValues");
             }
+            Log.e(TAG, "Nutritional values: " + nutritionalValues);
             dishes.add(new Dish(id, name, restaurantName, foodTags, nutritionTags, likes, rating,
                     sugarRating, address, distanceToUser, uploadDate, nutritionalValues, image));
         }
