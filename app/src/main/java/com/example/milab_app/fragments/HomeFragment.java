@@ -41,6 +41,8 @@ public class HomeFragment extends Fragment {
     RecyclerView topRatedRecyclerView;
     RecyclerView newestRecyclerView;
 
+    Slider sugarLevelSlider;
+
     public HomeFragment() {
         // Required empty public constructor
     }
@@ -52,8 +54,16 @@ public class HomeFragment extends Fragment {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_home, container, false);
 
+        // hide progress bar if it was visible
+        ((MainActivity) requireActivity()).hideProgressBar();
+
         User user = ((MainActivity) requireActivity()).getUser();
         userLatLng = ((MainActivity) requireActivity()).getCurrentDeviceLocation();
+        float sugarLevel = ((MainActivity) requireActivity()).getSugarLevel();
+
+        // update sugar level number on the button at the top of the screen
+        sugarLevelSlider = rootView.findViewById(R.id.sugar_level_slider);
+        updateSugarLevelText(rootView, sugarLevel);
 
         // update greeting text
         TextView greeting = rootView.findViewById(R.id.greetingText);
@@ -117,7 +127,11 @@ public class HomeFragment extends Fragment {
         sugarLevelPopupButton.setOnClickListener(v -> toggleSugarLevelPopUp(rootView));
 
         // init sugar level slider
-        initUpSeekBar(rootView);
+        float sugarLevel = ((MainActivity) requireActivity()).getSugarLevel();
+        sugarLevelSlider.setValue(sugarLevel);
+        // call the onValueChange listener to update the sugar level text
+        updateSugarLevelAndRecyclerViews(rootView, sugarLevel);
+        sugarLevelSlider.addOnChangeListener((slider, value, fromUser) -> updateSugarLevelAndRecyclerViews(rootView, value));
     }
 
     private void initRecyclerView(RecyclerView recyclerView, ArrayList<Dish> dishes) {
@@ -157,31 +171,32 @@ public class HomeFragment extends Fragment {
         closeButton.setOnClickListener(v -> sugarLevelPopUp.setVisibility(View.GONE));
     }
 
+    private void updateSugarLevelAndRecyclerViews(View rootView, float value) {
+        Log.d(TAG, "updateRecyclerViewsToSugarLevel - " + value);
+        updateSugarLevelText(rootView, value);
+        // normalize sugarLevel from the range [50, 150] to [1, 5]
+        int sugarLevel = (int) Math.ceil((value - 50) / 20.0);
+        // reverse sugarLevel to be in the range [6, 2]
+        sugarLevel = 7 - sugarLevel;
+        // update recycler views to show dishes with sugarRating >= sugarLevel
+        updateRecyclerViewToSugarLevel(recommendedDishes, sugarLevel, rootView.findViewById(R.id.recommendations));
+        updateRecyclerViewToSugarLevel(topRatedDishes, sugarLevel, rootView.findViewById(R.id.topRated));
+        updateRecyclerViewToSugarLevel(newestDishes, sugarLevel, rootView.findViewById(R.id.newest));
+    }
+
     @SuppressLint("SetTextI18n")
-    private void initUpSeekBar(View rootView) {
+    private void updateSugarLevelText(View rootView, float value) {
         Button sugarLevelPopupButton = rootView.findViewById(R.id.sugarLevelPopupButton);
         TextView sugarLevelTextView = rootView.findViewById(R.id.sugar_level);
-        Slider sugarLevelSlider = rootView.findViewById(R.id.sugar_level_slider);
-        sugarLevelSlider.addOnChangeListener((slider, value, fromUser) -> {
-            Log.d(TAG, "updateRecyclerViewsToSugarLevel - " + value);
-            if (value == slider.getValueTo()) {
-                sugarLevelPopupButton.setText("HI");
-                sugarLevelTextView.setText("HI");
-            } else if (value == slider.getValueFrom()) {
-                sugarLevelPopupButton.setText("I");
-                sugarLevelTextView.setText("I");
-            } else {
-                sugarLevelPopupButton.setText(String.valueOf((int) value));
-                sugarLevelTextView.setText(String.valueOf((int) value));
-            }
-            // normalize sugarLevel from the range [50, 150] to [1, 5]
-            int sugarLevel = (int) Math.ceil((value - 50) / 20.0);
-            // reverse sugarLevel to be in the range [6, 2]
-            sugarLevel = 7 - sugarLevel;
-            // update recycler views to show dishes with sugarRating >= sugarLevel
-            updateRecyclerViewToSugarLevel(recommendedDishes, sugarLevel, rootView.findViewById(R.id.recommendations));
-            updateRecyclerViewToSugarLevel(topRatedDishes, sugarLevel, rootView.findViewById(R.id.topRated));
-            updateRecyclerViewToSugarLevel(newestDishes, sugarLevel, rootView.findViewById(R.id.newest));
-        });
+        if (value == sugarLevelSlider.getValueTo()) {
+            sugarLevelPopupButton.setText("HI");
+            sugarLevelTextView.setText("HI");
+        } else if (value == sugarLevelSlider.getValueFrom()) {
+            sugarLevelPopupButton.setText("I");
+            sugarLevelTextView.setText("I");
+        } else {
+            sugarLevelPopupButton.setText(String.valueOf((int) value));
+            sugarLevelTextView.setText(String.valueOf((int) value));
+        }
     }
 }

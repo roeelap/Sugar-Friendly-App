@@ -44,7 +44,7 @@
     <string name="camera_roll">Camera Roll</string>
     <string name="add_a_dish">Add a dish</string>
     <string name="no_photo">No Photo</string>
-    <string name="lets_find_you_a_dish">Let\'s find\nyou a dish!</string>
+    <string name="lets_find_you_a_dish">Find a dish!</string>
     <string name="_100">100</string>
     <string name="upload_image_button">upload image</string>
     <string name="star">star</string>
@@ -56,7 +56,7 @@
     <string name="share">Share restaurant</string>
     <string name="map">Map</string>
     <string name="restaurant_page">Restaurant page</string>
-    <string name="let_s_share_a_new_dish">Let\'s share\na new dish!</string>
+    <string name="let_s_share_a_new_dish">Scan a dish!</string>
     <string name="excellent">Excellent</string>
     <string name="okay">Okay</string>
     <string name="good">Good</string>

@@ -29,7 +29,7 @@ public class LogmealAPI {
     private static final String TAG = "LogmealAPI";
     private static final String SEGMENTATION_URL = "https://api.logmeal.es/v2/image/segmentation/complete";
     private static final String NUTRITIONAL_INFO_URL = "https://api.logmeal.es/v2/recipe/nutritionalInfo";
-    private static final String LOGMEAL_API_KEY = "976f1efbe142ed81fb129cf9a680f17b32f81df9";
+    private static final String LOGMEAL_API_KEY = "cae1a745a87247faf7a433eec391bb2d25d6b9fb";
 
     OkHttpClient client;
 
@@ -164,7 +164,9 @@ public class LogmealAPI {
 
                 JSONObject dailyIntakeReference = nutritionalInfo.getJSONObject("dailyIntakeReference");
                 JSONObject sugarDailyIntakeReference = dailyIntakeReference.getJSONObject("SUGAR");
-                sugarLevel = sugarDailyIntakeReference.getString("level");
+                double sugarPercent = sugarDailyIntakeReference.getDouble("percent");
+                Log.e(TAG, "Sugar percent: " + sugarPercent);
+                calcSugarLevel(sugarPercent);
 
                 nutritionalValues.put("Calories", String.format("%.2f", nutritionalInfo.getDouble("calories"))); // calories
 
@@ -174,7 +176,6 @@ public class LogmealAPI {
                 parseValue(totalNutrients.getJSONObject("FAT")); // fat
                 parseValue(totalNutrients.getJSONObject("PROCNT")); // protein
                 parseValue(totalNutrients.getJSONObject("SUGAR")); // sugar
-
 
             } catch (Exception e) {
                 Log.e(TAG, "Exception: " + e.getMessage());
@@ -186,6 +187,16 @@ public class LogmealAPI {
             double quantity = value.getDouble("quantity");
             String quantityString = String.format("%.2f", quantity) + value.getString("unit");
             nutritionalValues.put(value.getString("label"), quantityString);
+        }
+
+        private void calcSugarLevel(double sugarPercent) {
+            if (sugarPercent < 5) {
+                sugarLevel = "Low";
+            } else if (sugarPercent < 10) {
+                sugarLevel = "Medium";
+            } else {
+                sugarLevel = "High";
+            }
         }
     }
 

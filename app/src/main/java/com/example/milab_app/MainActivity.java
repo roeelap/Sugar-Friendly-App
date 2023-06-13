@@ -52,6 +52,8 @@ public class MainActivity extends AppCompatActivity implements LogmealAPI.LogMea
     private ActivityResultLauncher<Intent> cameraLauncher;
     private Bitmap capturedImage;
 
+    private float sugarLevel = 100;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,6 +64,8 @@ public class MainActivity extends AppCompatActivity implements LogmealAPI.LogMea
         Log.e(TAG, "currentDeviceLocation: " + currentDeviceLocation);
 
         String fragment = getIntent().getStringExtra("fragment");
+        sugarLevel = getIntent().getFloatExtra("sugarLevel", 100);
+        // update the sugar slider in the home fragment
 
         // set up camera launcher for taking pictures
         cameraLauncher = registerForActivityResult(
@@ -75,6 +79,7 @@ public class MainActivity extends AppCompatActivity implements LogmealAPI.LogMea
                                 Log.e(TAG, "capturedImage is null");
                                 return;
                             }
+                            showProgressBar();
                             // send image to logmeal api
                             LogmealAPI logmealAPI = new LogmealAPI();
                             logmealAPI.sendImage(capturedImage, this);
@@ -110,6 +115,7 @@ public class MainActivity extends AppCompatActivity implements LogmealAPI.LogMea
     public User getUser() { return user; }
     public HashSet<String> getFavDishes() { return user.getFavDishes(); }
     public LatLng getCurrentDeviceLocation() { return currentDeviceLocation; }
+    public float getSugarLevel() { return sugarLevel; }
     public void showProgressBar() { findViewById(R.id.progress_bar).setVisibility(View.VISIBLE); }
     public void hideProgressBar() { findViewById(R.id.progress_bar).setVisibility(View.GONE); }
     public void toast(String message) {
@@ -177,9 +183,12 @@ public class MainActivity extends AppCompatActivity implements LogmealAPI.LogMea
      * @param restaurantName restaurant name
      */
     public void showAddressInGoogleMaps(String address, String restaurantName) {
-        Log.e(TAG, "showAddressInGoogleMaps: " + address + " " + restaurantName);
-        // TODO: open google maps with restaurant location
-        Uri gmmIntentUri = Uri.parse("geo:0,0?q=" + address + " " + restaurantName);
+        String restaurantAddress = "";
+        if (address != null) {
+            restaurantAddress = address;
+        }
+        Log.e(TAG, "showAddressInGoogleMaps: " + restaurantAddress + " " + restaurantName);
+        Uri gmmIntentUri = Uri.parse("geo:0,0?q=" + restaurantAddress + " " + restaurantName);
         Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
         mapIntent.setPackage("com.google.android.apps.maps");
         startActivity(mapIntent);
@@ -199,8 +208,14 @@ public class MainActivity extends AppCompatActivity implements LogmealAPI.LogMea
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, searchFragment).commit();
                 break;
             case "camera":
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, cameraFragment).commit();
-                break;
+                // check if camera permission is granted
+                if (ContextCompat.checkSelfPermission(MainActivity.this,
+                        android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(MainActivity.this,
+                            new String[]{android.Manifest.permission.CAMERA}, REQUEST_CAMERA_PERMISSION);
+                } else {
+                    openCamera();
+                }
         }
     }
 
@@ -257,6 +272,7 @@ public class MainActivity extends AppCompatActivity implements LogmealAPI.LogMea
     @Override
     public void onLogMealError(String message) {
         Log.e(TAG, "onLogMealError: " + message);
+        showFragment("home");
     }
 
     public interface Callback {

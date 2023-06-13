@@ -53,10 +53,9 @@ public class CameraFragment extends Fragment {
     }
 
     public CameraFragment(Bitmap capturedImage, LogmealAPI.LogmealResponse response) {
-        // Required empty public constructor
-        Log.e(TAG, "logmealResponse: " + logmealResponse);
         this.capturedImage = capturedImage;
         this.logmealResponse = response;
+        Log.e(TAG, "logmealResponse: " + logmealResponse);
     }
 
     @Override
@@ -67,8 +66,10 @@ public class CameraFragment extends Fragment {
 
         initTagsInput(rootView);
 
+        // hide progress bar if it was visible
+        ((MainActivity) requireActivity()).hideProgressBar();
+
         if (logmealResponse != null && capturedImage != null) {
-            //updateUI(rootView);
             updateUI(getActivity(), rootView);
         }
 
@@ -86,8 +87,8 @@ public class CameraFragment extends Fragment {
             }
 
             ArrayList<String> tags = getTags();
-            double sugarRating = Objects.equals(logmealResponse.sugarLevel, "HIGH") ? 4.0 :
-                    Objects.equals(logmealResponse.sugarLevel, "MEDIUM") ? 3.0 : 2.0;
+            double sugarRating = Objects.equals(logmealResponse.sugarLevel, "High") ? 4.0 :
+                    Objects.equals(logmealResponse.sugarLevel, "Medium") ? 3.0 : 2.0;
             uploadDish(dishName, restaurantName, tags, sugarRating);
         });
 
@@ -101,7 +102,7 @@ public class CameraFragment extends Fragment {
         tagsInputEditText.setOnEditorActionListener((v, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 String text = Objects.requireNonNull(tagsInputEditText.getText()).toString().trim();
-                addChip(tagsChipGroup, text);
+                addChip(tagsChipGroup, text, true);
                 tagsInputEditText.setText("");
                 return true;
             }
@@ -110,14 +111,19 @@ public class CameraFragment extends Fragment {
 
         tagsInputLayout.setEndIconOnClickListener(v -> {
             String text = Objects.requireNonNull(tagsInputEditText.getText()).toString().trim();
-            addChip(tagsChipGroup, text);
+            addChip(tagsChipGroup, text, true);
             tagsInputEditText.setText("");
         });
     }
 
-    private void addChip(ChipGroup chipGroup, String text) {
+    private void addChip(ChipGroup chipGroup, String text, boolean isCloseable) {
         if (!TextUtils.isEmpty(text)) {
-            ChipDrawable chipDrawable = ChipDrawable.createFromResource(requireContext(), R.xml.chip);
+            ChipDrawable chipDrawable;
+            if (isCloseable) {
+                chipDrawable = ChipDrawable.createFromResource(requireContext(), R.xml.chip);
+            } else {
+                chipDrawable = ChipDrawable.createFromResource(requireContext(), R.xml.chip_no_exit);
+            }
             Chip chip = new Chip(requireContext());
             chip.setChipDrawable(chipDrawable);
             chip.setText(text);
@@ -160,7 +166,7 @@ public class CameraFragment extends Fragment {
         // update predicted food items
         ChipGroup predictedFoodItemsChipGroup = rootView.findViewById(R.id.chipGroup_predicted_food_items);
         for (String foodItem : logmealResponse.detectedDishes) {
-            addChip(predictedFoodItemsChipGroup, foodItem);
+            addChip(predictedFoodItemsChipGroup, foodItem, false);
         }
 
         // update nutritional values table
@@ -175,9 +181,9 @@ public class CameraFragment extends Fragment {
         TextView sugarLevelTextView = rootView.findViewById(R.id.sugarLevel);
         sugarLevelTextView.setPadding(30, 0, 30, 0);
         sugarLevelTextView.setText(sugarLevel);
-        if (sugarLevel.equals("HIGH")) {
+        if (sugarLevel.equals("High")) {
             sugarLevelTextView.setBackground(ContextCompat.getDrawable(rootView.getContext(), R.drawable.rounded_corners_yellow));
-        } else if (sugarLevel.equals("MEDIUM")) {
+        } else if (sugarLevel.equals("Medium")) {
             sugarLevelTextView.setBackground(ContextCompat.getDrawable(rootView.getContext(), R.drawable.rounded_corners_light_green));
         } else {
             sugarLevelTextView.setBackground(ContextCompat.getDrawable(rootView.getContext(), R.drawable.rounded_corners_dark_green));

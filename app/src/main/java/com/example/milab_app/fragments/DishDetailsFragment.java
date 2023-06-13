@@ -3,7 +3,6 @@ package com.example.milab_app.fragments;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.ColorStateList;
-import android.media.Image;
 import android.os.Bundle;
 
 import androidx.core.content.ContextCompat;

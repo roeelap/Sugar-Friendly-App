@@ -44,7 +44,7 @@ public class Dish {
             if (nutrition != null) {
                 Iterator<String> keys = nutrition.keys();
                 while(keys.hasNext()) {
-                    String nutrient = (String)keys.next();
+                    String nutrient = keys.next();
                     String Value = nutrition.getString(nutrient);
                     this.nutritionalValues.put(nutrient, Value);
                 }
