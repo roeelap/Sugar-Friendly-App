@@ -5,11 +5,6 @@
         <item name="cornerSize">50%</item>
     </style>
 
-    <style name="add_dish_popup_animation">
-        <item name="android:windowEnterAnimation">@anim/slide_up</item>
-        <item name="android:windowExitAnimation">@anim/slide_down</item>
-    </style>
-
     <style name="ChipTextAppearance" parent="TextAppearance.MaterialComponents.Chip">
         <item name="android:textColor">@android:color/white</item>
     </style>

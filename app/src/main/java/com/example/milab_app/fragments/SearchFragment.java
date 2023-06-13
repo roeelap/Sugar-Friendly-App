@@ -13,7 +13,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -23,6 +22,7 @@ import com.example.milab_app.objects.Dish;
 import com.example.milab_app.utility.DataFetcher;
 import com.example.milab_app.utility.SearchResultsRecyclerViewAdapter;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.material.button.MaterialButton;
 
 import java.util.ArrayList;
 
@@ -117,12 +117,19 @@ public class SearchFragment extends Fragment {
     }
 
     private void createSearchButtons(View rootView) {
-        String[] buttons = {"meat", "beef", "italian", "fish", "vegan", "dessert", "hamburger", "sugar free", "reduced sugar", "removable ingredients", "reduced carbs"};
+        String[] buttons = {"pizza", "sushi", "italian", "hamburger", "sugar free", "pasta", "meat", "rice", "asian"};
+
+        ViewGroup.MarginLayoutParams layoutParams = new ViewGroup.MarginLayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        layoutParams.setMargins(15, 0, 15, 0);
+
         for (String button : buttons) {
             // create a button inside the flexbox
-            Button searchButton = new Button(rootView.getContext());
+            MaterialButton searchButton = new MaterialButton(rootView.getContext());
             searchButton.setText(button);
             searchButton.setTextSize(12);
+            searchButton.setCornerRadius(60);
+            searchButton.setBackgroundColor(getResources().getColor(R.color.light_gray, null));
+            searchButton.setLayoutParams(layoutParams);
             // add as a child to the flexbox
             ((ViewGroup) rootView.findViewById(R.id.searchButtons)).addView(searchButton);
             // add a listener to the button
