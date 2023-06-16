@@ -70,4 +70,23 @@
         </activity>
     </application>
 
+<!--    GOOGLE PIXEL REQUIREMENTS   -->
+<!--    <queries>-->
+<!--        &lt;!&ndash; Browser &ndash;&gt;-->
+<!--        <intent>-->
+<!--            <action android:name="android.intent.action.VIEW" />-->
+<!--            <data android:scheme="http" />-->
+<!--        </intent>-->
+
+<!--        &lt;!&ndash; Camera &ndash;&gt;-->
+<!--        <intent>-->
+<!--            <action android:name="android.media.action.IMAGE_CAPTURE" />-->
+<!--        </intent>-->
+
+<!--        &lt;!&ndash; Gallery &ndash;&gt;-->
+<!--        <intent>-->
+<!--            <action android:name="android.intent.action.GET_CONTENT" />-->
+<!--        </intent>-->
+<!--    </queries>-->
+
 </manifest>

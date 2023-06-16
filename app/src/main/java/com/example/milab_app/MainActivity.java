@@ -243,6 +243,7 @@ public class MainActivity extends AppCompatActivity implements LogmealAPI.LogMea
     public void openCamera() {
         Log.e(TAG, "openCamera");
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        Log.e(TAG, "openCamera: " + takePictureIntent);
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
             cameraLauncher.launch(takePictureIntent);
         }

@@ -48,6 +48,8 @@ public class CameraFragment extends Fragment {
     private TextInputEditText tagsInputEditText;
     private ChipGroup tagsChipGroup;
 
+    private Button uploadButton;
+
     public CameraFragment() {
         // Required empty public constructor
     }
@@ -73,7 +75,8 @@ public class CameraFragment extends Fragment {
             updateUI(getActivity(), rootView);
         }
 
-        Button uploadButton = rootView.findViewById(R.id.share_button);
+        uploadButton = rootView.findViewById(R.id.share_button);
+        uploadButton.setEnabled(true);
         uploadButton.setOnClickListener(v -> {
             String dishName = Objects.requireNonNull(((TextInputEditText) rootView.findViewById(R.id.dish_name_textInput)).getText()).toString().trim();
             String restaurantName = Objects.requireNonNull(((TextInputEditText) rootView.findViewById(R.id.restaurant_name_textInput)).getText()).toString().trim();
@@ -89,6 +92,8 @@ public class CameraFragment extends Fragment {
             ArrayList<String> tags = getTags();
             double sugarRating = Objects.equals(logmealResponse.sugarLevel, "High") ? 4.0 :
                     Objects.equals(logmealResponse.sugarLevel, "Medium") ? 3.0 : 2.0;
+            // disable button to prevent multiple uploads
+            uploadButton.setEnabled(false);
             uploadDish(dishName, restaurantName, tags, sugarRating);
         });
 
@@ -226,6 +231,8 @@ public class CameraFragment extends Fragment {
                     // hide progress bar
                     ((MainActivity) requireActivity()).hideProgressBar();
                     if (response.isError()) {
+                        // enable button again
+                        uploadButton.setEnabled(true);
                         ((MainActivity) requireActivity()).toast("Failed to upload dish!");
                         return;
                     }
